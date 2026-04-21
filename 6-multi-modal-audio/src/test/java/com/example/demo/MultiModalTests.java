@@ -42,7 +42,7 @@ public class MultiModalTests {
                 .build();
         var prompt = new Prompt(userMessage, chatOptions);
         var chatResponse = chatModel.call(prompt);
-        log.info("{}", Objects.requireNonNull(chatResponse.getResult()).getOutput().getText());
+        log.info("\n{}", Objects.requireNonNull(chatResponse.getResult()).getOutput().getText());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class MultiModalTests {
 
         var chatResponse = chatModel.call(prompt);
         var assistantMessage = Objects.requireNonNull(chatResponse.getResult()).getOutput();
-        log.info("{}", assistantMessage.getText());
+        log.info("\n{}", assistantMessage.getText());
         var audio = assistantMessage.getMedia().getFirst().getDataAsByteArray();
         Files.write(Paths.get("D:\\hackers\\lecture\\output\\springboot-onyx.mp3"), audio);
     }
