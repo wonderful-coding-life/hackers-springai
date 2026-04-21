@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/hackers-multi-modal-image" />
-        <option name="gradleJvm" value="temurin-21" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/2-chat-model" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/hackers-multi-modal-image" />
+            <option value="$PROJECT_DIR$/2-chat-model" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/3-chat-option" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/3-chat-option" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/4-chat-memory" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/4-chat-memory" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/5-multi-modal-image" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/5-multi-modal-image" />
           </set>
         </option>
       </GradleProjectSettings>

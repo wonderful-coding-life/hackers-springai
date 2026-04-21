@@ -7,13 +7,40 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.44/503fd0b002dbb237fa4656cf4b8021666a8aebac/lombok-1.18.44.jar" />
         </processorPath>
-        <module name="multimodal.main" />
-        <module name="multimodal.test" />
+        <module name="chat-memory.main" />
+        <module name="chat-memory.test" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="demo" target="21" />
+      <module name="demo.main" target="21" />
+      <module name="demo.test" target="21" />
+      <module name="marketing" target="21" />
+      <module name="marketing.main" target="21" />
+      <module name="marketing.test" target="21" />
+      <module name="multimodal.main" target="21" />
+      <module name="multimodal.test" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="chat-memory" options="-parameters" />
+      <module name="chat-memory.main" options="-parameters" />
+      <module name="chat-memory.test" options="-parameters" />
+      <module name="chat-model" options="-parameters" />
+      <module name="chat-model.main" options="-parameters" />
+      <module name="chat-model.test" options="-parameters" />
+      <module name="chat-option" options="-parameters" />
+      <module name="chat-option.main" options="-parameters" />
+      <module name="chat-option.test" options="-parameters" />
+      <module name="com.example.multimodal.main" options="-parameters" />
+      <module name="com.example.multimodal.test" options="-parameters" />
+      <module name="demo" options="-parameters" />
+      <module name="demo.main" options="-parameters" />
+      <module name="demo.test" options="-parameters" />
+      <module name="marketing" options="-parameters" />
+      <module name="marketing.main" options="-parameters" />
+      <module name="marketing.test" options="-parameters" />
       <module name="multimodal" options="-parameters" />
       <module name="multimodal.main" options="-parameters" />
       <module name="multimodal.test" options="-parameters" />

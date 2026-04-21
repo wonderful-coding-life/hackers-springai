@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chat-memory.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chat-memory.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chat-model.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chat-model.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chat-option.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chat-option.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/hackers-springai.iml" filepath="$PROJECT_DIR$/hackers-springai.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multimodal.main.iml" filepath="$PROJECT_DIR$/.idea/modules/multimodal.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multimodal.test.iml" filepath="$PROJECT_DIR$/.idea/modules/multimodal.test.iml" />
     </modules>
   </component>
 </project>
