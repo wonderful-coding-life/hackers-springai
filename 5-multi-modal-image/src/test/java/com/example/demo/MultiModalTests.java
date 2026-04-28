@@ -38,8 +38,8 @@ public class MultiModalTests {
         var mimeType = MimeTypeUtils.IMAGE_JPEG;
         var media = new Media(mimeType, resource);
         var userMessage = UserMessage.builder()
-                //.text("자동차 모델 이름 알려 줘.")
-                .text("사진 속의 풍경을 동시로 표현해 줘.")
+                .text("자동차 모델 이름 알려 줘.")
+                //.text("사진 속의 풍경을 동시로 표현해 줘.")
                 .media(media)
                 .build();
         var completions = chatModel.call(userMessage);
