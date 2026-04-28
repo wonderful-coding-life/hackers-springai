@@ -25,7 +25,7 @@ public class ApiController {
     public String postImages(@RequestParam("file") MultipartFile file, @RequestParam("message") String message) throws IOException {
 
         var resource = file.getResource();
-        var mimeType = MimeTypeUtils.parseMimeType(Objects.requireNonNull(file.getContentType()));
+        var mimeType = MimeTypeUtils.parseMimeType(file.getContentType());
 
         var userMessage = UserMessage.builder()
                 .text(message)
@@ -37,13 +37,21 @@ public class ApiController {
 
     @PostMapping("/receipts")
     public String postReceipts(@RequestParam("file") List<MultipartFile> files) {
+        var media = files.stream()
+                .map(file -> Media.builder()
+                        .mimeType(MimeTypeUtils.parseMimeType(file.getContentType()))
+                        .data(file.getResource())
+                        .build())
+                .toList();
 
+        /*
         var media = new ArrayList<Media>();
         for (MultipartFile file : files) {
             var resource = file.getResource();
-            var mimeType = MimeTypeUtils.parseMimeType(Objects.requireNonNull(file.getContentType()));
+            var mimeType = MimeTypeUtils.parseMimeType(file.getContentType());
             media.add(new Media(mimeType, resource));
         }
+        */
 
         var userMessage = UserMessage.builder()
                 .text("영수증의 날짜, 상호, 금액을 표 형태로 정리해 주세요.")

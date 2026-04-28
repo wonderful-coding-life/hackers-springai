@@ -9,6 +9,7 @@ import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.MimeTypeUtils;
 
 import java.util.List;
@@ -20,14 +21,20 @@ public class MultiModalTests {
     @Autowired
     private OpenAiChatModel chatModel;
 
+    @Autowired
+    private ResourceLoader resourceLoader;
+
     @Test
     public void testMultiModalImage() {
         //Resource resource = new ClassPathResource("/audio/voc_kart_rider.mp3");
         //Resource resource = new FileSystemResource("D:\\hackers\\lecture\\sample\\voc-kart-rider.mp3");
         //Resource resource = new UrlResource("https://xxx/sample_audio.mp3");
 
-        //var resource = new ClassPathResource("images/car.jpg");
-        var resource = new ClassPathResource("images/disney-world-2.jpg");
+        //resourceLoader.getResource("classpath:/images/car.jpg");
+        //resourceLoader.getResource("file:/home/hackers/images/car.jpg");
+        //resourceLoader.getResource("https://x.x.x.x/car.jpg");
+
+        var resource = resourceLoader.getResource("classpath:images/car.jpg");
         var mimeType = MimeTypeUtils.IMAGE_JPEG;
         var media = new Media(mimeType, resource);
         var userMessage = UserMessage.builder()
