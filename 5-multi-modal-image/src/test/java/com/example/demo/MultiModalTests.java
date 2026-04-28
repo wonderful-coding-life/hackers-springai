@@ -26,15 +26,15 @@ public class MultiModalTests {
 
     @Test
     public void testMultiModalImage() {
-        //Resource resource = new ClassPathResource("/audio/voc_kart_rider.mp3");
-        //Resource resource = new FileSystemResource("D:\\hackers\\lecture\\sample\\voc-kart-rider.mp3");
-        //Resource resource = new UrlResource("https://xxx/sample_audio.mp3");
+        //Resource resource = new ClassPathResource("/images/car.jpg");
+        //Resource resource = new FileSystemResource("/home/hackers/images/car.jpg");
+        //Resource resource = new UrlResource("https://x.x.x.x/car.jpg");
 
         //resourceLoader.getResource("classpath:/images/car.jpg");
         //resourceLoader.getResource("file:/home/hackers/images/car.jpg");
         //resourceLoader.getResource("https://x.x.x.x/car.jpg");
 
-        var resource = resourceLoader.getResource("classpath:images/car.jpg");
+        var resource = resourceLoader.getResource("classpath:/images/car.jpg");
         var mimeType = MimeTypeUtils.IMAGE_JPEG;
         var media = new Media(mimeType, resource);
         var userMessage = UserMessage.builder()
