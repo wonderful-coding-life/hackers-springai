@@ -1,0 +1,12 @@
+@host = http://localhost:8080
+
+# 회의 요약
+POST {{host}}/meetings/summaries
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="weekly-meeting.mp3"
+Content-Type: audio/mpeg
+
+< src/main/resources/audio/weekly-meeting.mp3
+--WebAppBoundary--
