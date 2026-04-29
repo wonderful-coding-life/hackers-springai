@@ -7,8 +7,8 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.44/503fd0b002dbb237fa4656cf4b8021666a8aebac/lombok-1.18.44.jar" />
         </processorPath>
-        <module name="image.main" />
-        <module name="image.test" />
+        <module name="multi-modal-audio.main" />
+        <module name="multi-modal-audio.test" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -20,9 +20,6 @@
       <module name="marketing" target="21" />
       <module name="marketing.main" target="21" />
       <module name="marketing.test" target="21" />
-      <module name="multimodal" target="21" />
-      <module name="multimodal.main" target="21" />
-      <module name="multimodal.test" target="21" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
