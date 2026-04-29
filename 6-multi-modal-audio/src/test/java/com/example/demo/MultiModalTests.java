@@ -37,30 +37,46 @@ public class MultiModalTests {
         var userMessage = UserMessage.builder()
                 .text("고객의 민원을 요약해 줘")
                 .media(media).build();
+
+        // spring.ai.openai.chat.options.model=gpt-audio
+        // var completion = chatModel.call(userMessage);
+        // log.info("\n{}", completion);
+
         var chatOptions = OpenAiChatOptions.builder()
-                .model("gpt-audio-mini")
+                .model("gpt-audio")
                 .build();
         var prompt = new Prompt(userMessage, chatOptions);
         var chatResponse = chatModel.call(prompt);
-        log.info("\n{}", Objects.requireNonNull(chatResponse.getResult()).getOutput().getText());
+        log.info("\n{}", chatResponse.getResult().getOutput().getText());
+
+        var usage = (OpenAiApi.Usage)chatResponse.getMetadata().getUsage().getNativeUsage();
+        log.info("audio tokens = {}", usage.promptTokensDetails().audioTokens());
     }
 
     @Test
     public void testAudioOutput() throws IOException {
         var chatOptions = OpenAiChatOptions.builder()
-                .model("gpt-audio-mini")
+                // spring.ai.openai.chat.options.model=gpt-audio
+                //.model("gpt-audio-mini")
                 .outputModalities(List.of("text", "audio"))
+                // `audio` modality requires an `audio` output configuration.
+                // NOVA for woman voice, ONYX for man voice
                 .outputAudio(new OpenAiApi.ChatCompletionRequest.AudioParameters(
                         OpenAiApi.ChatCompletionRequest.AudioParameters.Voice.ONYX,
                         OpenAiApi.ChatCompletionRequest.AudioParameters.AudioResponseFormat.MP3
-                )).build();
+                ))
+                .build();
 
         var prompt = new Prompt("스프링부트에 대해 짧게 설명해 주세요.", chatOptions);
 
         var chatResponse = chatModel.call(prompt);
         var assistantMessage = Objects.requireNonNull(chatResponse.getResult()).getOutput();
         log.info("\n{}", assistantMessage.getText());
+
         var audio = assistantMessage.getMedia().getFirst().getDataAsByteArray();
         Files.write(Paths.get("D:\\hackers\\lecture\\output\\springboot-onyx.mp3"), audio);
+
+        var usage = (OpenAiApi.Usage)chatResponse.getMetadata().getUsage().getNativeUsage();
+        log.info("audio tokens = {}", usage.completionTokenDetails().audioTokens());
     }
 }

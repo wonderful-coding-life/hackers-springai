@@ -1,11 +1,8 @@
 package com.example.demo.controller;
 
 import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
 import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.util.MimeTypeUtils;
@@ -15,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
 
 @RestController
 public class ApiController {
@@ -39,15 +34,17 @@ public class ApiController {
         var mimeType = MimeTypeUtils.parseMimeType("audio/mp3");
 
         var userMessage = UserMessage.builder()
-                .text("회의 내용을 요약해 줘")
+                .text("회의 내용을 한국어로 요약해 줘.")
                 .media(new Media(mimeType, resource))
                 .build();
 
-        var chatOptions = OpenAiChatOptions.builder()
-                .model("gpt-audio-mini")
-                .build();
+        return chatModel.call(userMessage);
 
-        var chatResponse = chatModel.call(new Prompt(userMessage, chatOptions));
-        return Objects.requireNonNull(chatResponse.getResult()).getOutput().getText();
+//        var chatOptions = OpenAiChatOptions.builder()
+//                .model("gpt-audio")
+//                .build();
+//
+//        var chatResponse = chatModel.call(new Prompt(userMessage, chatOptions));
+//        return Objects.requireNonNull(chatResponse.getResult()).getOutput().getText();
     }
 }
