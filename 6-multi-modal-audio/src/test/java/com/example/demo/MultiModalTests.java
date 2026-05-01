@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.openai.models.completions.CompletionUsage;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +9,8 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.MimeTypeUtils;
 
@@ -53,8 +52,8 @@ public class MultiModalTests {
         var chatResponse = chatModel.call(prompt);
         log.info("\n{}", chatResponse.getResult().getOutput().getText());
 
-        var usage = (OpenAiApi.Usage)chatResponse.getMetadata().getUsage().getNativeUsage();
-        log.info("audio tokens = {}", usage.promptTokensDetails().audioTokens());
+        var usage = (CompletionUsage)chatResponse.getMetadata().getUsage().getNativeUsage();
+        log.info("native usage = {}", usage);
     }
 
     @Test
@@ -65,9 +64,9 @@ public class MultiModalTests {
                 .outputModalities(List.of("text", "audio"))
                 // `audio` modality requires an `audio` output configuration.
                 // NOVA for woman voice, ONYX for man voice
-                .outputAudio(new OpenAiApi.ChatCompletionRequest.AudioParameters(
-                        OpenAiApi.ChatCompletionRequest.AudioParameters.Voice.ONYX,
-                        OpenAiApi.ChatCompletionRequest.AudioParameters.AudioResponseFormat.MP3
+                .outputAudio(new OpenAiChatOptions.AudioParameters(
+                        OpenAiChatOptions.AudioParameters.Voice.ONYX,
+                        OpenAiChatOptions.AudioParameters.AudioResponseFormat.MP3
                 ))
                 .build();
 
@@ -80,7 +79,7 @@ public class MultiModalTests {
         var audio = assistantMessage.getMedia().getFirst().getDataAsByteArray();
         Files.write(Paths.get("D:\\hackers\\lecture\\output\\springboot-onyx.mp3"), audio);
 
-        var usage = (OpenAiApi.Usage)chatResponse.getMetadata().getUsage().getNativeUsage();
-        log.info("audio tokens = {}", usage.completionTokenDetails().audioTokens());
+        var usage = (CompletionUsage)chatResponse.getMetadata().getUsage().getNativeUsage();
+        log.info("native usage = {}", usage);
     }
 }
