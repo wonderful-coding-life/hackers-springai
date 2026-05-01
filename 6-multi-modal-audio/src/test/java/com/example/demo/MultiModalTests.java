@@ -12,6 +12,7 @@ import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.MimeTypeUtils;
 
 import java.io.IOException;
@@ -27,9 +28,12 @@ public class MultiModalTests {
     @Autowired
     private OpenAiChatModel chatModel;
 
+    @Autowired
+    private ResourceLoader resourceLoader;
+
     @Test
     public void testAudioInput() {
-        var resource = new ClassPathResource("/audio/voc-kart-rider.mp3");
+        var resource = resourceLoader.getResource("classpath:/audio/voc-kart-rider.mp3");
         var media = Media.builder()
                 .data(resource)
                 .mimeType(MimeTypeUtils.parseMimeType("audio/mp3"))
