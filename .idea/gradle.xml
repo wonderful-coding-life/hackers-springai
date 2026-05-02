@@ -51,6 +51,14 @@
           </set>
         </option>
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/7-rag" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/7-rag" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>
