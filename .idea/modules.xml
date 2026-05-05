@@ -10,6 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-modal-audio.test.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-modal-audio.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-modal-image.main.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-modal-image.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-modal-image.test.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-modal-image.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tool.main.iml" filepath="$PROJECT_DIR$/.idea/modules/tool.main.iml" />
     </modules>
   </component>
 </project>
