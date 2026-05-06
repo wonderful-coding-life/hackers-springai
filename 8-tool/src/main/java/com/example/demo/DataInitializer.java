@@ -20,11 +20,13 @@ public class DataInitializer implements ApplicationRunner {
             var orders = List.of(
                     ProductOrder.builder()
                             .orderNumber("H001")
+                            .memberId("user123")
                             .productName("맥북에어")
                             .shippingAddress("서울시 강남구 역삼동")
                             .shippingStatus("상품준비중").build(),
                     ProductOrder.builder()
                             .orderNumber("H002")
+                            .memberId("user123")
                             .productName("아이폰")
                             .shippingAddress("서울시 영등포구 여의도동")
                             .shippingStatus("배송중").build()

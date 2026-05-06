@@ -1,19 +1,23 @@
 package com.example.demo.tool;
 
 import com.example.demo.repository.ProductOrderRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class ProductOrderTool {
     @Autowired
     private ProductOrderRepository repository;
 
     @Tool(description = "상품 주문 목록을 알려줍니다")
-    String getProductOrders() {
-        var productOrders = repository.findAll();
+    String getProductOrders(@ToolParam(description = "회원 아이디") String memberId) {
+        log.info("\ngetProductOrders({})", memberId);
+
+        var productOrders = repository.findByMemberId(memberId);
 
         StringBuilder result = new StringBuilder("주문 목록은 다음과 같아요\n");
         for (var productOrder : productOrders) {
@@ -28,6 +32,8 @@ public class ProductOrderTool {
 
     @Tool(description = "상품 주문을 취소합니다")
     String cancelProductOrder(@ToolParam(description = "주문번호") String orderNumber) {
+        log.info("\ncancelProductOrder({})", orderNumber);
+
         var productOrder = repository.findByOrderNumber(orderNumber);
         if (productOrder.isPresent()) {
             if ("배송중".equals(productOrder.get().getShippingStatus())) {
