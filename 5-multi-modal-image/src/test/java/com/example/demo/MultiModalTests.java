@@ -52,14 +52,11 @@ public class MultiModalTests {
     public void testMultiModalImageReceipts() {
         var media = List.of(
                 Media.builder()
-                        .data(new ClassPathResource("/images/receipt-1.png"))
-                        .mimeType(MimeTypeUtils.IMAGE_PNG).build(),
+                        .data(new ClassPathResource("/images/receipt-1.jpg"))
+                        .mimeType(MimeTypeUtils.IMAGE_JPEG).build(),
                 Media.builder()
-                        .data(new ClassPathResource("/images/receipt-2.png"))
-                        .mimeType(MimeTypeUtils.IMAGE_PNG).build(),
-                Media.builder()
-                        .data(new ClassPathResource("/images/receipt-3.png"))
-                        .mimeType(MimeTypeUtils.IMAGE_PNG).build());
+                        .data(new ClassPathResource("/images/receipt-2.jpg"))
+                        .mimeType(MimeTypeUtils.IMAGE_JPEG).build());
         var userMessage = UserMessage.builder()
                 .text("영수증의 날짜, 상호, 금액을 표 형태로 정리해 주세요.")
                 .media(media)

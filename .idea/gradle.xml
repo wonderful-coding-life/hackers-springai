@@ -12,6 +12,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/12-moderation" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/12-moderation" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/2-chat-model" />
         <option name="modules">
           <set>
