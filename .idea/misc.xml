@@ -9,6 +9,7 @@
     <file type="web" url="file://$PROJECT_DIR$/5-multi-modal-image" />
     <file type="web" url="file://$PROJECT_DIR$/6-multi-modal-audio" />
     <file type="web" url="file://$PROJECT_DIR$/7-rag" />
+    <file type="web" url="file://$PROJECT_DIR$/9-structured-output" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_21" project-jdk-name="temurin-21" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
