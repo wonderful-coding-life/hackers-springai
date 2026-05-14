@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/chat-model.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chat-model.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/chat-option.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chat-option.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/hackers-springai.iml" filepath="$PROJECT_DIR$/hackers-springai.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/image.main.iml" filepath="$PROJECT_DIR$/.idea/modules/image.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-modal-audio.main.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-modal-audio.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-modal-audio.test.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-modal-audio.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-modal-image.main.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-modal-image.main.iml" />

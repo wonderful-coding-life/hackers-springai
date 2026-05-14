@@ -23,42 +23,44 @@ public class ImageModelTests {
     @Autowired
     private OpenAiImageModel imageModel;
 
-    // 리얼리즘 사진 스타일
+    // 시네마틱 영화 장면 스타일
     String message1 = """
             화성 표면에서 탐사 로버가 움직이고 있으며, 그 옆에는 2족 보행 로봇이 함께 탐사 활동을 하고 있다.
+            탐사 로버와 2족 보행 로봇에는 모두 "Hacker's Campus" 로고와 브랜드명이 선명하게 표시되어 있다.
             붉은 모래 언덕과 먼지 낀 하늘이 배경이며, 태양빛이 낮게 비추는 오후의 분위기.
-            실제 사진처럼 보이는 고해상도 장면, 자연스러운 그림자와 질감.
+            실제 사진처럼 보이는 고해상도 장면, 자연스러운 그림자와 질감, 시네마틱한 우주 탐사 분위기, 사실적인 금속 재질 표현.
             """;
 
-    // 시네마틱 영화 장면 스타일
     String message2 = """
-            화성 표면에서 탐사 로버가 움직이고 있으며, 그 옆에는 2족 보행 로봇이 함께 탐사 활동을 하고 있다.
-            붉은 모래 언덕과 먼지 낀 하늘이 배경이며, 태양빛이 낮게 비추는 오후의 분위기.
-            영화 포스터처럼 웅장하고 드라마틱한 구도.
+            A realistic Mars exploration scene.
+            A futuristic rover is moving across the Martian surface, while a humanoid biped robot is exploring beside it.
+            Both the rover and the humanoid robot prominently display the brand name and logo "Hacker's Campus".
+            Red sand dunes and a dusty Martian sky in the background, with low afternoon sunlight casting long natural shadows.
+            Ultra realistic photography style, cinematic space exploration atmosphere, detailed metallic textures, natural lighting, high-resolution image.
             """;
 
-    // 과학 다큐멘터리 스타일
+    // 리얼리즘 사진 스타일
     String message3 = """
-            화성 탐사 현장을 다큐멘터리 사진처럼 표현.
-            실제 NASA 탐사 사진처럼 로버의 금속 질감과 먼지 낀 렌즈 표현이 사실적이다.
-            2족 보행 로봇이 로버 옆에서 탐사를 돕는 장면.
+            Create a premium Instagram marketing banner for Hacker's Cafe summer coffee promotion.
+            
+            Requirements:
+            - prominently feature the brand name "Hacker's Cafe"
+            - modern premium cafe branding
+            - iced coffee on marble table
+            - warm natural sunlight
+            - clean luxury typography layout
+            - realistic commercial product photography
+            - stylish cafe advertisement design
+            - cinematic lighting
+            - Instagram 4:5 aspect ratio
+            - high-end lifestyle marketing style
             """;
-
-    @Test
-    public void testImageModel() {
-        var response = imageModel.call(new ImagePrompt(message1));
-        var url = Objects.requireNonNull(response.getResult()).getOutput().getUrl();
-        log.info("\n{}", url);
-    }
 
     @Test
     public void testImageModelWithOptions() throws IOException {
         var options = OpenAiImageOptions.builder()
-                .model("gpt-image-1") // dall-e-3(will be deprecated on May 12, 2026), gpt-image-1-mini, gpt-image-2 (protected)
+                .model("gpt-image-1-mini") // dall-e-3(will be deprecated on May 12, 2026), gpt-image-1-mini, gpt-image-2 (protected)
                 .quality("medium") // high, medium, low
-                //.responseFormat("b64_json") // url, b64_json (dall-e-xxx supports both, gpt-image-xxx supports only b64_json)
-                .width(1024) // need to check the valid combinations of width and height for each model, otherwise it will throw an error
-                .height(1024)
                 .build();
 
         var response = imageModel.call(new ImagePrompt(message3, options));
@@ -69,18 +71,6 @@ public class ImageModelTests {
             byte[] imageBytes = Base64.getDecoder().decode(b64Json);
             // support only png format for b64_json response, so we can save the file with .png extension
             Files.write(Paths.get("D:\\hackers\\lecture\\output\\openai-image.png"), imageBytes);
-        }
-
-        var url = Objects.requireNonNull(response.getResult()).getOutput().getUrl();
-        if (url != null) {
-            log.info("\n{}", url);
-        }
-
-        // each generation has metadata with revised prompt which can be used for debugging and analysis
-        // revised prompt is the final prompt that was used for generation after any internal modifications by the model
-        var metadata = Objects.requireNonNull(response.getResult()).getMetadata();
-        if (metadata instanceof OpenAiImageGenerationMetadata open) {
-            log.info("\n{}", open.getRevisedPrompt());
         }
     }
 }
