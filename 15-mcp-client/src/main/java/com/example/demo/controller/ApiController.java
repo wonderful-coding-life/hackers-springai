@@ -1,16 +1,14 @@
 package com.example.demo.controller;
 
-import com.example.demo.tool.ProductOrderTool;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.support.ToolCallbacks;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,12 +19,12 @@ import java.text.MessageFormat;
 import java.util.List;
 
 @RestController
-@Slf4j
 public class ApiController {
     @Autowired
     private OpenAiChatModel chatModel;
+
     @Autowired
-    private ProductOrderTool productOrderTool;
+    private SyncMcpToolCallbackProvider toolCallbackProvider;
 
     private static final String systemMessage = """
             당신은 해커스 쇼핑몰의 고객지원 상담사야.
@@ -47,10 +45,10 @@ public class ApiController {
                 new SystemMessage(systemMessage)
         );
 
-        ToolCallback[] toolCallbacks = ToolCallbacks.from(productOrderTool);
+        ToolCallback[] mcpTools = toolCallbackProvider.getToolCallbacks();
 
         ChatOptions chatOptions = OpenAiChatOptions.builder()
-                .toolCallbacks(toolCallbacks)
+                .toolCallbacks(mcpTools)
                 .build();
         Prompt prompt = new Prompt(messages, chatOptions);
         ChatResponse response = chatModel.call(prompt);
