@@ -8,13 +8,10 @@
       <module fileurl="file://$PROJECT_DIR$/hackers-springai.iml" filepath="$PROJECT_DIR$/hackers-springai.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/image.main.iml" filepath="$PROJECT_DIR$/.idea/modules/image.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/image.test.iml" filepath="$PROJECT_DIR$/.idea/modules/image.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mcp-server-webmvc.main.iml" filepath="$PROJECT_DIR$/.idea/modules/mcp-server-webmvc.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-modal-audio.main.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-modal-audio.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-modal-audio.test.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-modal-audio.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-modal-image.main.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-modal-image.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-modal-image.test.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-modal-image.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rag.main.iml" filepath="$PROJECT_DIR$/.idea/modules/rag.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rag.test.iml" filepath="$PROJECT_DIR$/.idea/modules/rag.test.iml" />
     </modules>
   </component>
 </project>
