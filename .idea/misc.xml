@@ -3,6 +3,7 @@
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/10-image" />
+    <file type="web" url="file://$PROJECT_DIR$/15-mcp-server-webmvc" />
     <file type="web" url="file://$PROJECT_DIR$/2-chat-model" />
     <file type="web" url="file://$PROJECT_DIR$/3-chat-option" />
     <file type="web" url="file://$PROJECT_DIR$/4-chat-memory" />

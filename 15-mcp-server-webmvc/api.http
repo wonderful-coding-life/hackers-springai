@@ -1,0 +1,38 @@
+@host = http://localhost:8080
+
+### 초기화
+POST {{host}}/mcp
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2025-03-26",
+    "capabilities": {},
+    "clientInfo": {
+      "name": "postman",
+      "version": "1.0"
+    }
+  }
+}
+
+### 초기화 완료 알림
+POST {{host}}/mcp
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/initialized"
+}
+
+### Tool 목록 조회
+POST {{host}}/mcp
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/list"
+}

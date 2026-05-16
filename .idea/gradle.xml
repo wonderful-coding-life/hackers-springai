@@ -20,6 +20,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/15-mcp-server-mvc" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/15-mcp-server-mvc" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/2-chat-model" />
         <option name="modules">
           <set>
