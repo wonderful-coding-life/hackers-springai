@@ -1,3 +1,10 @@
+# 핵심 키워드
+- Spring Web + Model Context Protocol Server
+- spring.ai.mcp.server.protocol=stateless
+- @McpTool(name="get-product-orders", title="상품 주문 목록을 조회합니다", description="상품 주문 목록을 조회합니다")
+- @McpTool(name="cancel-product-order", title="상품 주문을 취소합니다.", description = "특정 상품 주문을 취소할 때 사용합니다")
+- MCP Inspector: npx @modelcontextprotocol/inspector
+
 # 프로젝트 셋업
 - 스프링 이니셜라이저
     - Spring Web
