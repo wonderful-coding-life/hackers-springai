@@ -56,14 +56,42 @@ public class ImageModelTests {
             - high-end lifestyle marketing style
             """;
 
+    String message4 = """
+            Create a premium Instagram marketing banner for Hacker's Sun Cream summer UV protection campaign.
+            
+            Requirements:
+            
+            * prominently feature the brand name "Hacker's Sun Cream"
+            * premium modern skincare branding
+            * elegant sunscreen product placed on a clean marble or beachside surface
+            * bright summer sunlight with refreshing coastal atmosphere
+            * healthy glowing skin and fresh summer mood
+            * SPF50+ PA++++ family sun cream concept
+            * suitable for sensitive skin and daily outdoor use
+            * clean luxury typography layout
+            * realistic commercial beauty product photography
+            * stylish K-beauty advertisement design
+            * cinematic lighting with soft sun flare
+            * refreshing blue, white, and warm sunlight color palette
+            * modern premium lifestyle aesthetic
+            * minimal and sophisticated composition
+            * Instagram 4:5 aspect ratio
+            * high-end cosmetic campaign style
+            * ultra-detailed realistic textures
+            * soft natural shadows and elegant reflections
+            * modern summer skincare commercial atmosphere
+            """;
+
     @Test
     public void testImageModelWithOptions() throws IOException {
         var options = OpenAiImageOptions.builder()
                 .model("gpt-image-1-mini") // dall-e-3(will be deprecated on May 12, 2026), gpt-image-1-mini, gpt-image-2 (protected)
-                .quality("medium") // high, medium, low
+                .quality("medium") // high, medium, low, auto
+                .width(1024) // 1024, 1536
+                .height(1024) // 1024, 1535
                 .build();
 
-        var response = imageModel.call(new ImagePrompt(message3, options));
+        var response = imageModel.call(new ImagePrompt(message4, options));
         var b64Json = Objects.requireNonNull(response.getResult()).getOutput().getB64Json();
         if (b64Json != null) {
             log.info("\bBase64 JSON length: {}", b64Json.length());
