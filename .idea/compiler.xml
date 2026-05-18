@@ -20,6 +20,9 @@
       <module name="marketing" target="21" />
       <module name="marketing.main" target="21" />
       <module name="marketing.test" target="21" />
+      <module name="mcp-client-github" target="21" />
+      <module name="mcp-client-github.main" target="21" />
+      <module name="mcp-client-github.test" target="21" />
       <module name="mcp-server" target="21" />
       <module name="mcp-server.main" target="21" />
       <module name="mcp-server.test" target="21" />
