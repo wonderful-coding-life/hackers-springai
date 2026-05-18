@@ -57,3 +57,16 @@ Red sand dunes and a dusty Martian sky in the background, with low afternoon sun
 Ultra realistic photography style, cinematic space exploration atmosphere, detailed metallic textures, natural lighting, high-resolution image.
 
 ```
+# OpenAI SDK 사용
+
+Spring AI의 `ImageModel`은 OpenAI, Stability AI, Vertex AI 등  
+다양한 이미지 모델에 대한 공통 추상화를 제공합니다.
+
+하지만 OpenAI의 Image Edit와 같은 Provider 전용 고급 기능은  
+아직 공통 인터페이스에 완전히 통합되지 않았습니다.
+
+따라서 이러한 기능을 사용하려면 OpenAI SDK를 직접 사용해야 하며,  
+다음과 같이 `OpenAIClient`를 Bean으로 등록하여 사용할 수 있습니다.
+- `AppConfig.java` 참조
+- `OpenAiClientTests.java` 참조
+
