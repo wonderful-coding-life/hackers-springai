@@ -11,6 +11,7 @@ import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 @SpringBootTest
@@ -22,8 +23,8 @@ public class TranscriptionModelTests {
 
     @Test
     public void testTranscriptModelSimple() {
-        Resource resource = new ClassPathResource("/audio/voc_kart_rider.mp3");
-        //Resource resource = new FileSystemResource("D:\\archive\\audio\\voc_kart_rider.mpg");
+        //Resource resource = new ClassPathResource("/audio/voc_kart_rider.mp3");
+        Resource resource = new FileSystemResource("D:/hackers/lecture/sample/crew-interview-1.mp3");
         //Resource resource = new UrlResource("https://xxx/sample_audio.mp3");
         String script = transcriptionModel.transcribe(resource);
         log.info("script {}", script);
@@ -36,7 +37,7 @@ public class TranscriptionModelTests {
      *   whisper-1(default), gpt-4o-transcribe, gpt-4o-mini-transcribe 지원
      *
      * - language
-     *   ko, en, ja 등 90개 이상의 언어 지원
+     *   번역할 언어 ko, en, ja 등 90개 이상의 언어 지원
      *   설정하지 않으면 자동 감지(auto detect)
      *
      * - responseFormat
@@ -51,7 +52,7 @@ public class TranscriptionModelTests {
                 .responseFormat(AudioResponseFormat.SRT)
                 .build();
 
-        Resource resource = new ClassPathResource("/audio/voc_kart_rider.mp3");
+        Resource resource = new FileSystemResource("D:/hackers/lecture/sample/crew-interview-2.mp3");
         AudioTranscriptionPrompt prompt = new AudioTranscriptionPrompt(resource, openAiAudioTranscriptionOptions);
         AudioTranscriptionResponse response = transcriptionModel.call(prompt);
 
