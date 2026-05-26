@@ -27,7 +27,7 @@ public class TranscriptionModelTests {
         Resource resource = new FileSystemResource("D:/hackers/lecture/sample/crew-interview-1.mp3");
         //Resource resource = new UrlResource("https://xxx/sample_audio.mp3");
         String script = transcriptionModel.transcribe(resource);
-        log.info("script {}", script);
+        log.info("\n{}", script);
     }
 
     /**
@@ -56,6 +56,6 @@ public class TranscriptionModelTests {
         AudioTranscriptionPrompt prompt = new AudioTranscriptionPrompt(resource, openAiAudioTranscriptionOptions);
         AudioTranscriptionResponse response = transcriptionModel.call(prompt);
 
-        log.info("transcript {}", response.getResult().getOutput());
+        log.info("\n{}", response.getResult().getOutput());
     }
 }

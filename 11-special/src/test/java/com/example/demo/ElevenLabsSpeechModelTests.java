@@ -3,7 +3,8 @@ package com.example.demo;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.audio.tts.TextToSpeechPrompt;
 import org.springframework.ai.audio.tts.TextToSpeechResponse;
-import org.springframework.ai.openai.OpenAiAudioSpeechModel;
+import org.springframework.ai.elevenlabs.ElevenLabsTextToSpeechModel;
+import org.springframework.ai.elevenlabs.ElevenLabsTextToSpeechOptions;
 import org.springframework.ai.openai.OpenAiAudioSpeechOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,18 +14,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @SpringBootTest
-public class SpeechModelTests {
+public class ElevenLabsSpeechModelTests {
     @Autowired
-    private OpenAiAudioSpeechModel speechModel;
+    private ElevenLabsTextToSpeechModel speechModel;
 
     @Test
     public void testSpeechModelSimple() throws IOException {
         byte[] bin = speechModel.call("이번역은 해커스, 해커스역입니다. 내리실 문은 오른쪽 입니다. 해커스캠퍼스로 가실 분들은 이번역에서 내리시기 바랍니다.");
-        Files.write(Paths.get("D:/hackers/lecture/output/openai-tts-simple.mp3"), bin);
+        Files.write(Paths.get("D:/hackers/lecture/output/elevenlabs-tts-simple.mp3"), bin);
     }
 
     @Test
-    public void testSpeechModelOptions() throws IOException {
+    public void testSpeechModel() throws IOException {
         String text = """
                 안녕하세요. 해커스 캠퍼스 고객지원센터입니다.
                 문의하신 맥북에어는 현재 배송 준비 중입니다.
@@ -45,17 +46,17 @@ public class SpeechModelTests {
                 Thank you!
                 """;
 
-        OpenAiAudioSpeechOptions speechOptions = OpenAiAudioSpeechOptions.builder()
-                .model("gpt-4o-mini-tts") // tts-1, tts-1-hd, gpt-4o-mini-tts (not ready yet for spring ai)
-                .voice(OpenAiAudioSpeechOptions.Voice.NOVA) // default ALLOY?
-                .responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3)
-                .speed(1.0)
+        // Eunha(cBOtnpVZNlQ5VJygXGB8) - Elegant Korean Female
+        // Jini(0oqpliV6dVSr9XomngOW) - Warm & Intelligent Korean Female
+        ElevenLabsTextToSpeechOptions speechOptions = ElevenLabsTextToSpeechOptions.builder()
+                .model("eleven_multilingual_v2") // eleven_v3, eleven_flash_v2_5, eleven_multilingual_v2, etc...
+                .voiceId("cBOtnpVZNlQ5VJygXGB8")
                 .build();
 
         TextToSpeechPrompt prompt = new TextToSpeechPrompt(text, speechOptions);
         TextToSpeechResponse response = speechModel.call(prompt);
 
         byte[] bin = response.getResult().getOutput();
-        Files.write(Paths.get("D:/hackers/lecture/output/openai_tts_options_nova.mp3"), bin);
+        Files.write(Paths.get("D:/hackers/lecture/output/elevenlabs_tts_options_eunha.mp3"), bin);
     }
 }
