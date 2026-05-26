@@ -3,11 +3,8 @@ package com.example.demo;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.moderation.ModerationOptions;
-import org.springframework.ai.moderation.ModerationOptionsBuilder;
 import org.springframework.ai.moderation.ModerationPrompt;
 import org.springframework.ai.openai.OpenAiModerationModel;
-import org.springframework.ai.openai.OpenAiModerationOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
@@ -17,8 +14,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @SpringBootTest
-public class ModerationTests {
-    private static final Logger log = LoggerFactory.getLogger(ModerationTests.class);
+public class ModerationModelTests {
+    private static final Logger log = LoggerFactory.getLogger(ModerationModelTests.class);
 
     @Autowired
     private ResourceLoader resourceLoader;
