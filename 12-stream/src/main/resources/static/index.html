@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>WebFlux Chat (SSE)</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #chat-box { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; white-space: pre-wrap; }
+        #user-input { width: 80%; }
+        #send-btn { padding: 5px 10px; }
+        #status { color:#666; margin: 6px 0; }
+    </style>
+</head>
+<body>
+<h2>OpenAI 대화방</h2>
+<div id="status">대기 중…</div>
+<div id="chat-box"></div>
+<br/>
+<input type="text" id="user-input" placeholder="문의: " />
+<button id="send-btn">전송</button>
+
+<script>
+    const sendButton = document.getElementById('send-btn');
+    const userInput = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+    const status  = document.getElementById('status');
+
+    // 현재 활성화된 SSE(EventSource) 연결 객체
+    let es = null;
+
+    // 전송 버튼 클릭 또는 Enter 입력 시 메시지 전송
+    sendButton.addEventListener('click', sendMessage);
+    userInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function sendMessage() {
+      const query = userInput.value.trim();
+
+      // 빈 문자열은 전송하지 않음
+      if (!query) return;
+
+      // 기존 SSE 연결이 남아있다면 종료
+      closeStream();
+
+      appendMessage(`\nYou: ${query}\nAI: `);
+
+      // 입력창 초기화
+      userInput.value = '';
+
+      // 사용자 입력을 URL Encoding 하여 서버 호출
+      const url = `/chat?message=${encodeURIComponent(query)}`;
+
+      // SSE(Server-Sent Events) 연결 생성
+      es = new EventSource(url);
+
+      // 서버와 연결 성공
+      es.onopen = () => {
+        status.textContent = 'SSE 연결되었습니다';
+      };
+
+      // 서버에서 스트리밍 데이터 수신
+      es.onmessage = (evt) => {
+        // Spring WebFlux에서 Flux<String>을
+        // TEXT_EVENT_STREAM 형식으로 반환하면
+        // 데이터가 실시간으로 순차 전달됨
+        appendMessage(evt.data);
+      };
+
+      // 연결 종료 또는 오류 발생
+      es.onerror = () => {
+        status.textContent = '연결 종료(정상 완료 또는 오류)';
+
+        // EventSource 정리
+        closeStream();
+      };
+    }
+
+    // 채팅창에 메시지 추가 후 자동 스크롤
+    function appendMessage(text) {
+        chatBox.textContent += text;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // SSE 연결 종료 및 객체 초기화
+    function closeStream() {
+        if (es) {
+            es.close();
+            es = null;
+        }
+    }
+</script>
+</body>
+</html>
