@@ -17,7 +17,18 @@ public class ChatController {
 
     @GetMapping(value = "/chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> getChatResponse(@RequestParam("message") String message) {
-        log.info("Chat message: {}", message);
-        return chatModel.stream(message);
+
+        //return chatModel.stream(message);
+
+        log.info("1. request start");
+
+        Flux<String> stream = chatModel.stream(message)
+                .doOnSubscribe(s -> log.info("3. subscribed"))
+                .doOnNext(token -> log.info("4. token: {}", token))
+                .doOnComplete(() -> log.info("5. stream complete"));
+
+        log.info("2. controller return");
+
+        return stream;
     }
 }

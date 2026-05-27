@@ -8,6 +8,7 @@
         #chat-box { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; white-space: pre-wrap; }
         #user-input { width: 80%; }
         #send-btn { padding: 5px 10px; }
+        #stop-btn { padding: 5px 10px; }
         #status { color:#666; margin: 6px 0; }
     </style>
 </head>
@@ -18,21 +19,24 @@
 <br/>
 <input type="text" id="user-input" placeholder="문의: " />
 <button id="send-btn">전송</button>
+<button id="stop-btn">중지</button>
 
 <script>
-    const sendButton = document.getElementById('send-btn');
-    const userInput = document.getElementById('user-input');
-    const chatBox = document.getElementById('chat-box');
     const status  = document.getElementById('status');
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-btn');
+    const stopButton = document.getElementById('stop-btn');
 
     // 현재 활성화된 SSE(EventSource) 연결 객체
     let es = null;
 
     // 전송 버튼 클릭 또는 Enter 입력 시 메시지 전송
     sendButton.addEventListener('click', sendMessage);
-    userInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            sendMessage();
+    stopButton.addEventListener('click', () => {
+        if (es) {
+            status.textContent = '사용자에 의해 스트림 중지됨';
+            closeStream();
         }
     });
 
