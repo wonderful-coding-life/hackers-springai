@@ -70,7 +70,8 @@
         // Spring WebFlux에서 Flux<String>을
         // TEXT_EVENT_STREAM 형식으로 반환하면
         // 데이터가 실시간으로 순차 전달됨
-        appendMessage(evt.data);
+        //appendMessage(evt.data);
+        appendMessage(JSON.parse(evt.data));
       };
 
       // 연결 종료 또는 오류 발생
