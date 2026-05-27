@@ -49,7 +49,8 @@ Spring WebFlux에서 `Flux<String>` 을 `text/event-stream` 형식으로 반환�
 OpenAI 스트리밍 토큰이 실시간으로 브라우저에 전달된다.
 하지만 OpenAI 스트리밍 토큰에는 앞 공백이 포함될 수 있으며,
 SSE(EventSource) 처리 과정에서 앞 공백이 손실될 수 있다.
-따라서토큰 문자열을 그대로 보내지 말고 JSON 문자열로 인코딩하여 전달한다.
+따라서 String을 직렬화 해서 보내야 하는데 `ObjectMapper.writeValueAsString()`은
+단순히 문자열에 따옴표를 붙이는 것이 아니라, JSON 규칙에 맞게 escape 처리까지 수행하는 JSON 직렬화 기능이다.
 
 서버에서
 ```java

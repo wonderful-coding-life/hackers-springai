@@ -24,6 +24,8 @@ public class ChatController {
 
         log.info("1. request start");
 
+        // ObjectMapper.writeValueAsString()은 Java 문자열을 JSON 문자열 형태로 안전하게 직렬화하며,
+        // 따옴표 추가와 escape 처리까지 자동 수행한다.
         Flux<String> stream = chatModel.stream(message)
                 .map(objectMapper::writeValueAsString)
                 .doOnSubscribe(s -> log.info("3. subscribed"))
