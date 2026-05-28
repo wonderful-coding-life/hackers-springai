@@ -21,7 +21,7 @@ spring.ai.mcp.client.streamable-http.connections.product-order-server.url=http:/
 # 컨트롤러 구현
 - 의존성 주입
     - 기존: private final ProductOrderTool productOrderTool;
-    - 변경: private final SyncMcpToolCallbackProvider toolCallbackProvider;
+    - 변경: private final ToolCallbackProvider toolCallbackProvider;
 - 프롬프트 옵션 구성
     - 기존:
 ```java

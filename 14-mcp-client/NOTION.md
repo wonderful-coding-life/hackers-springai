@@ -16,6 +16,12 @@ Spring AI 기반의 MCP Client를 사용하면 이러한 서비스들과 손쉽�
 
 # Notion 연동 준비
 
+## 0. Node.js 설치
+Notion MCP Server는 물론 많은 MCP Server들이 NPX(Node Package eXecute)로 실행되도록 되어 있어
+기본적으로 Node.js가 설치되어 있어야 한다.
+https://nodejs.org/ko/download
+설치 후 npx --version으로 설치가 정상적으로 되었는지 확인한다.
+
 ## 1. Notion 토큰 생성 및 페이지 연결
 
 Notion은 다음과 같은 구조를 가집니다.
