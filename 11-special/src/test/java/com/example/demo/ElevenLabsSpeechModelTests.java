@@ -5,7 +5,6 @@ import org.springframework.ai.audio.tts.TextToSpeechPrompt;
 import org.springframework.ai.audio.tts.TextToSpeechResponse;
 import org.springframework.ai.elevenlabs.ElevenLabsTextToSpeechModel;
 import org.springframework.ai.elevenlabs.ElevenLabsTextToSpeechOptions;
-import org.springframework.ai.openai.OpenAiAudioSpeechOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
