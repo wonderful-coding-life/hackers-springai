@@ -17,38 +17,33 @@ public class SpeechModelTests {
     @Autowired
     private OpenAiAudioSpeechModel speechModel;
 
+    private String text = """
+            안녕하세요. 해커스 캠퍼스 고객지원센터입니다.
+            문의하신 맥북에어는 현재 배송 준비 중입니다.
+            예상 도착 시간은 오후 3시이며,
+            배송기사 도착전 문자메시지가 발송될 예정입니다.
+            추가 문의사항이 있으시면 “상담원 연결”이라고 말씀해 주세요.
+            """;
+
+    private String textEng = """
+            Hello, this is the Hackers Campus Customer Support Center.
+            The MacBook Air you inquired about is currently being prepared for delivery.
+            The estimated arrival time is 3:00 PM, and a text message notification will be sent before the delivery driver arrives.
+            If you have any additional questions, please say “Connect me to an agent.”
+            """;
+
     @Test
     public void testSpeechModelSimple() throws IOException {
-        byte[] bin = speechModel.call("이번역은 해커스, 해커스역입니다. 내리실 문은 오른쪽 입니다. 해커스캠퍼스로 가실 분들은 이번역에서 내리시기 바랍니다.");
+        byte[] bin = speechModel.call(text);
         Files.write(Paths.get("D:/hackers/lecture/output/openai-tts-simple.mp3"), bin);
     }
 
     @Test
     public void testSpeechModelOptions() throws IOException {
-        String text = """
-                안녕하세요. 해커스 캠퍼스 고객지원센터입니다.
-                문의하신 맥북에어는 현재 배송 준비 중입니다.
-                예상 도착 시간은 오후 3시이며,
-                배송기사 도착전 문자메시지가 발송될 예정입니다.
-                추가 문의사항이 있으시면 “상담원 연결”이라고 말씀해 주세요.
-                """;
-
-        String textKor = """
-                안녕하세요, 고객님.
-                문의 사항이 있으시면 '삐' 소리 후에 음성으로 남겨 주세요.
-                확인 후 빠르게 연락드리겠습니다.
-                """;
-
-        String textEng = """
-                Hello, this is Hackers.
-                If you have any questions, please leave a voice message after the beep.
-                Thank you!
-                """;
-
         OpenAiAudioSpeechOptions speechOptions = OpenAiAudioSpeechOptions.builder()
                 .model("gpt-4o-mini-tts") // tts-1, tts-1-hd, gpt-4o-mini-tts (not ready yet for spring ai)
                 .voice(OpenAiAudioSpeechOptions.Voice.NOVA) // default ALLOY?
-                .responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3)
+                .responseFormat(OpenAiAudioSpeechOptions.AudioResponseFormat.MP3) // MP3, WAV
                 .speed(1.0)
                 .build();
 

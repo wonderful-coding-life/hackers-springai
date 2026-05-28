@@ -13,6 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 @SpringBootTest
 public class TranscriptionModelTests {
     private static final Logger log = LoggerFactory.getLogger(TranscriptionModelTests.class);
@@ -21,12 +25,12 @@ public class TranscriptionModelTests {
     private OpenAiAudioTranscriptionModel transcriptionModel;
 
     @Test
-    public void testTranscriptModelSimple() {
+    public void testTranscriptModelSimple() throws IOException {
         //Resource resource = new ClassPathResource("/audio/voc_kart_rider.mp3");
-        Resource resource = new FileSystemResource("D:/hackers/lecture/sample/crew-interview-1.mp3");
         //Resource resource = new UrlResource("https://xxx/sample_audio.mp3");
+        Resource resource = new FileSystemResource("D:/hackers/lecture/sample/crew-interview-1.mp3");
         String script = transcriptionModel.transcribe(resource);
-        log.info("\n{}", script);
+        Files.writeString(Paths.get("D:/hackers/lecture/output/interview.txt"), script);
     }
 
     /**
@@ -44,7 +48,7 @@ public class TranscriptionModelTests {
      *   SRT(SubRip Subtitle) -> 현재 가장 많이 사용하는 범용 자막 포맷
      */
     @Test
-    public void testTranscriptModelOptions() {
+    public void testTranscriptModelOptions() throws IOException {
         OpenAiAudioTranscriptionOptions openAiAudioTranscriptionOptions = OpenAiAudioTranscriptionOptions.builder()
                 .model("whisper-1")
                 .language("ko")
@@ -55,6 +59,6 @@ public class TranscriptionModelTests {
         AudioTranscriptionPrompt prompt = new AudioTranscriptionPrompt(resource, openAiAudioTranscriptionOptions);
         AudioTranscriptionResponse response = transcriptionModel.call(prompt);
 
-        log.info("\n{}", response.getResult().getOutput());
+        Files.writeString(Paths.get("D:/hackers/lecture/output/interview.srt"), response.getResult().getOutput());
     }
 }
