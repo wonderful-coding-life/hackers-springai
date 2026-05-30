@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebFlux Chat (SSE)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/chatbot.css">
+</head>
+<body>
+<div class="chat-shell">
+    <main class="chat-main">
+        <header class="chat-header">
+            <h1 class="chat-title">OpenAI 대화방</h1>
+            <p class="chat-subtitle">실시간 스트리밍 채팅</p>
+        </header>
+
+        <section id="chat-log" class="chat-log" aria-live="polite">
+            <div id="empty-state" class="empty-state">
+                <h2>무엇을 도와드릴까요?</h2>
+                <p>메시지를 입력하면 답변을 실시간으로 받아볼 수 있습니다.</p>
+            </div>
+        </section>
+
+        <div class="composer-wrap">
+            <form id="composer-form" class="composer" autocomplete="off">
+                <textarea
+                        id="user-input"
+                        class="composer-input"
+                        rows="1"
+                        placeholder="문의: "
+                        aria-label="메시지 입력"
+                ></textarea>
+                <button id="action-btn" class="action-button" type="submit" aria-label="전송" title="전송">
+                    <i id="send-icon" class="icon" data-lucide="send"></i>
+                    <i id="stop-icon" class="icon hidden" data-lucide="square"></i>
+                </button>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script>
+    const chatLog = document.getElementById('chat-log');
+    const emptyState = document.getElementById('empty-state');
+    const userInput = document.getElementById('user-input');
+    const composerForm = document.getElementById('composer-form');
+    const actionButton = document.getElementById('action-btn');
+    const sendIcon = document.getElementById('send-icon');
+    const stopIcon = document.getElementById('stop-icon');
+
+    // 현재 활성화된 SSE(EventSource) 연결 객체
+    let es = null;
+    let isStreaming = false;
+    let currentAiBubble = null;
+
+    lucide.createIcons();
+
+    composerForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        if (isStreaming) {
+            if (es) {
+                closeStream();
+            }
+            return;
+        }
+
+        sendMessage();
+    });
+
+    userInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            composerForm.requestSubmit();
+        }
+    });
+
+    userInput.addEventListener('input', autoGrowTextarea);
+
+    function sendMessage() {
+        const query = userInput.value.trim();
+
+        // 빈 문자열은 전송하지 않음
+        if (!query) return;
+
+        // 기존 SSE 연결이 남아있다면 종료
+        closeStream();
+
+        appendUserMessage(query);
+        currentAiBubble = appendAiMessageBubble();
+
+        // 입력창 초기화
+        userInput.value = '';
+        autoGrowTextarea();
+
+        // 사용자 입력을 URL Encoding 하여 서버 호출
+        const url = `/chat?message=${encodeURIComponent(query)}`;
+
+        // SSE(Server-Sent Events) 연결 생성
+        es = new EventSource(url);
+        setStreamingState(true);
+
+        // 서버와 연결 성공
+        es.onopen = () => {
+            // UI에서 별도 연결 상태 영역은 사용하지 않음
+        };
+
+        // 서버에서 스트리밍 데이터 수신
+        es.onmessage = (evt) => {
+            // Spring WebFlux에서 Flux<String>을
+            // TEXT_EVENT_STREAM 형식으로 반환하면
+            // 데이터가 실시간으로 순차 전달됨
+            appendMessage(JSON.parse(evt.data));
+        };
+
+        // 연결 종료 또는 오류 발생
+        es.onerror = () => {
+            // EventSource 정리
+            closeStream();
+        };
+    }
+
+    // 채팅창에 메시지 추가 후 자동 스크롤
+    function appendMessage(text) {
+        if (!currentAiBubble) {
+            currentAiBubble = appendAiMessageBubble();
+        }
+
+        currentAiBubble.textContent += text;
+        scrollToBottom();
+    }
+
+    function appendUserMessage(text) {
+        hideEmptyState();
+
+        const row = document.createElement('div');
+        row.className = 'message-row user';
+
+        const bubble = document.createElement('div');
+        bubble.className = 'message-bubble';
+        bubble.textContent = text;
+
+        row.appendChild(bubble);
+        chatLog.appendChild(row);
+        scrollToBottom();
+    }
+
+    function appendAiMessageBubble() {
+        hideEmptyState();
+
+        const row = document.createElement('div');
+        row.className = 'message-row ai';
+
+        const bubble = document.createElement('div');
+        bubble.className = 'message-bubble';
+
+        row.appendChild(bubble);
+        chatLog.appendChild(row);
+        scrollToBottom();
+
+        return bubble;
+    }
+
+    // SSE 연결 종료 및 객체 초기화
+    function closeStream() {
+        if (es) {
+            es.close();
+            es = null;
+        }
+
+        currentAiBubble = null;
+        setStreamingState(false);
+    }
+
+    function setStreamingState(streaming) {
+        isStreaming = streaming;
+        sendIcon.classList.toggle('hidden', streaming);
+        stopIcon.classList.toggle('hidden', !streaming);
+        actionButton.classList.toggle('is-streaming', streaming);
+        actionButton.setAttribute('aria-label', streaming ? '중지' : '전송');
+        actionButton.setAttribute('title', streaming ? '중지' : '전송');
+    }
+
+    function hideEmptyState() {
+        if (emptyState) {
+            emptyState.remove();
+        }
+    }
+
+    function scrollToBottom() {
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function autoGrowTextarea() {
+        userInput.style.height = 'auto';
+        userInput.style.height = `${Math.min(userInput.scrollHeight, 160)}px`;
+    }
+
+    autoGrowTextarea();
+</script>
+</body>
+</html>
+
