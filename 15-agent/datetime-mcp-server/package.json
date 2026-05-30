@@ -1,0 +1,11 @@
+{
+  "name": "datetime-mcp-server",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "datetime-mcp-server": "index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0"
+  }
+}
