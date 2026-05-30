@@ -63,3 +63,31 @@ es.onmessage = (evt) => {
     appendMessage(JSON.parse(evt.data));
 };
 ```
+
+> **주의**
+>
+> Spring AI 2.0.0-M5 ~ M8에서는 `OpenAiChatModel.stream()` 사용 시 응답이 토큰 단위로 실시간 전달되지 않고, 모델 응답 생성 완료 후 한 번에 전달되는 이슈가 보고되어 있습니다. 따라서 SSE 예제 실행 시 스트리밍이 정상적으로 보이지 않을 수 있습니다. 2.0.0-RC1에 계획되어 있습니다.
+
+## EventSource 사용 시 주의사항
+
+브라우저의 `EventSource` 객체는 SSE(Server-Sent Events)를 간편하게 사용할 수 있지만 다음과 같은 제약이 있습니다.
+
+- `GET` 요청만 지원
+- 요청 본문(Request Body) 전송 불가
+- 커스텀 HTTP Header 추가 불가
+- 복잡한 JSON 데이터 전송에 부적합
+
+AI 채팅 서비스에서는 대화 이력, 시스템 프롬프트, 첨부파일 정보 등을 함께 전송해야 하는 경우가 많으므로 실무에서는 `EventSource` 대신 `fetch()` 기반의 스트리밍 방식을 주로 사용합니다.
+
+```javascript
+const response = await fetch('/chat', {
+    method: 'POST',
+    body: JSON.stringify({
+        message: query
+    })
+});
+```
+
+이 예제는 SSE 프로토콜의 동작 원리를 이해하기 위해 `EventSource`를 사용하였으며, 실제 서비스에서는 `fetch() + POST + Streaming` 방식 사용을 권장합니다.
+
+
