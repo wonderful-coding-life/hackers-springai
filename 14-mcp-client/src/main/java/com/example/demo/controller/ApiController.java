@@ -12,7 +12,7 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.MessageFormat;
@@ -32,7 +32,7 @@ public class ApiController {
             """;
 
     @PostMapping("/chats")
-    public String postChats(@RequestParam("message") String message) {
+    public String postChats(@RequestBody String message) {
         String memberId = "user123";
 
         String userMessage = MessageFormat.format("""
@@ -50,33 +50,11 @@ public class ApiController {
         ChatOptions chatOptions = OpenAiChatOptions.builder()
                 .toolCallbacks(mcpTools)
                 .build();
+
         Prompt prompt = new Prompt(messages, chatOptions);
+
         ChatResponse response = chatModel.call(prompt);
-        return response.getResult().getOutput().getText();
-    }
 
-    private static final String notionSystemMessage = """
-        당신은 Notion 문서 작성 도우미입니다.
-        사용자가 페이지 생성/수정/삭제를 요청하면 Notion MCP Tool을 사용하여 작업하세요.
-        필수 정보가 충분하면 추가 확인 질문 없이 바로 실행하세요.
-        새 페이지 생성 시 사용자가 위치를 지정하지 않으면 항상 다음 parent page_id 아래에 생성하세요.
-        parent page_id: 36e50b450ffa8012b882cbaf0aaa1f26
-        """;
-
-    @PostMapping("/notions")
-    public String postNotions(@RequestParam("message") String message) {
-        List<Message> messages = List.of(
-                new UserMessage(message),
-                new SystemMessage(notionSystemMessage)
-        );
-
-        ToolCallback[] mcpTools = toolCallbackProvider.getToolCallbacks();
-
-        ChatOptions chatOptions = OpenAiChatOptions.builder()
-                .toolCallbacks(mcpTools)
-                .build();
-        Prompt prompt = new Prompt(messages, chatOptions);
-        ChatResponse response = chatModel.call(prompt);
         return response.getResult().getOutput().getText();
     }
 }
