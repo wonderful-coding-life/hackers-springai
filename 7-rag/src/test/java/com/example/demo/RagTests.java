@@ -161,31 +161,34 @@ public class RagTests {
 
     @Test
     public void testPdfReader() throws IOException {
-        DocumentReader reader = new PagePdfDocumentReader("classpath:/인공지능_시대의_예술.pdf");
+        // 해커스캠퍼스 온라인 쇼핑몰 반품 정책 매뉴얼.pdf
+        // 해커스캠퍼스 온라인 쇼핑몰 반품 FAQ.pdf
+        DocumentReader reader = new PagePdfDocumentReader("classpath:/해커스캠퍼스 온라인 쇼핑몰 반품 정책 매뉴얼.pdf");
         List<Document> documents = reader.read();
-        documents.forEach(document -> document.getMetadata().put("article", "ai"));
+        documents.forEach(document -> document.getMetadata().put("category", "shopping"));
         TokenTextSplitter splitter = TokenTextSplitter.builder().build();
         vectorStore.write(splitter.split(documents));
     }
 
     @Test
     public void testSimilaritySearchInPdfFile() {
-        String question1 = "인공지능 시대의 예술에 대해 제시된 5가지 시나리오는 무엇이며 각각의 특징은 무엇인가?";
-        String question2 = "인공지능 기술 발전이 예술성과 창의성의 개념에 어떤 변화를 가져올 것으로 예상되는가?";
-        String question3 = "인공지능 시대의 예술 변화에 대응하기 위해 교육, 기술, 정책 측면에서 어떤 전략이 제시되었는가?";
+        String question1 = "제가 교재를 구매했는데 책에 필기를 조금 했습니다. 반품하려면 배송비는 누가 부담하고 환불은 받을 수 있나요?";
+        String question2 = "쿠폰과 적립금을 사용해서 결제했는데 일부 상품만 반품하면 환불 금액은 어떻게 계산되나요?";
+        String question3 = "주문한 상품과 다른 상품이 배송됐는데 반품 절차와 환불까지 걸리는 시간을 알려주세요.";
 
-        String question = question2;
-
+        String question = question1;
         var request = SearchRequest.builder()
                 .query(question)
                 .topK(3)
-                .filterExpression("article == 'ai'")
+                .filterExpression("category == 'shopping'")
                 .build();
 
         var documents = vectorStore.similaritySearch(request);
         var information = String.join("\n", documents.stream().map(Document::getText).toList());
         var prompt = MessageFormat.format("""
-                다음의 정보를 기반으로 하여 답을 하고, 정보가 없는 경우에는 모른다고 답변 하세요.
+                당신은 해커스캠퍼스 쇼핑몰 고객센터 상담원이야.
+                친절하고 명확하며 간략하게 답변 해 줘.
+                
                 [정보]
                 {0}
                 [질문]
