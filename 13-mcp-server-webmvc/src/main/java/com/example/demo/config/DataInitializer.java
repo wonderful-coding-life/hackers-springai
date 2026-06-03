@@ -17,11 +17,15 @@ public class DataInitializer implements ApplicationRunner {
                 .orderNumber("1000000")
                 .productName("맥북에어")
                 .shippingAddress("서울시 영등포구 여의도동")
-                .shippingStatus("배송중").build());
+                .shippingStatus("배송중")
+                .memberName("user")
+                .build());
         productOrderRepository.save(ProductOrder.builder()
                 .orderNumber("1000001")
                 .productName("아이폰")
                 .shippingAddress("서울시 강남구 역삼동")
-                .shippingStatus("준비중").build());
+                .shippingStatus("준비중")
+                .memberName("user")
+                .build());
     }
 }

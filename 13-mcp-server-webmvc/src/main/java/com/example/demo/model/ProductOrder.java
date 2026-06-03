@@ -22,4 +22,5 @@ public class ProductOrder {
     private String productName;
     private String shippingAddress;
     private String shippingStatus;
+    private String memberName;
 }

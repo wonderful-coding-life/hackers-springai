@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ApiController {
@@ -33,15 +34,10 @@ public class ApiController {
 
     @PostMapping("/chats")
     public String postChats(@RequestBody String message) {
-        String memberId = "user123";
-
-        String userMessage = MessageFormat.format("""
-                회원 아이디: {0}
-                요청 내용: {1}
-                """, memberId, message);
+        String username = "user2";
 
         List<Message> messages = List.of(
-                new UserMessage(userMessage),
+                new UserMessage(message),
                 new SystemMessage(systemMessage)
         );
 
@@ -49,6 +45,9 @@ public class ApiController {
 
         ChatOptions chatOptions = OpenAiChatOptions.builder()
                 .toolCallbacks(mcpTools)
+                .toolContext(Map.of(
+                        "username", username
+                ))
                 .build();
 
         Prompt prompt = new Prompt(messages, chatOptions);

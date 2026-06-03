@@ -4,9 +4,11 @@ import com.example.demo.model.ProductOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ProductOrderRepository extends JpaRepository<ProductOrder, Long> {
-    Optional<ProductOrder> findByOrderNumber(String orderNumber);
+    Optional<ProductOrder> findByOrderNumberAndMemberName(String orderNumber, String username);
+    List<ProductOrder> findByMemberName(String memberName);
 }
