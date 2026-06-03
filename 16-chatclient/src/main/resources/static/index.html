@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>해커스캠퍼스 고객센터</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/chatbot.css" />
+</head>
+<body class="bg-slate-100 text-slate-900">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <main id="app-shell" class="app-shell w-full max-w-[430px] overflow-hidden bg-white shadow-2xl ring-1 ring-black/5">
+            <!-- 로그인 화면 -->
+            <section id="login-screen" class="screen active px-6 py-8">
+                <div class="mb-8 text-center">
+                    <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-600 text-2xl text-white shadow-lg shadow-indigo-200">
+                        HC
+                    </div>
+                    <h1 class="text-2xl font-bold tracking-tight">해커스캠퍼스 고객센터</h1>
+                    <p class="mt-3 text-sm leading-6 text-slate-500">
+                        상담용 계정으로 로그인하면 AI 상담을 시작할 수 있습니다.
+                    </p>
+                </div>
+
+                <form id="login-form" class="space-y-4" autocomplete="off">
+                    <div>
+                        <label for="username" class="mb-2 block text-sm font-semibold text-slate-700">사용자명</label>
+                        <input id="username" name="username" type="text" inputmode="text" autocapitalize="none" autocomplete="off"
+                               class="input-field" placeholder="username을 입력하세요" required />
+                    </div>
+                    <div>
+                        <label for="password" class="mb-2 block text-sm font-semibold text-slate-700">비밀번호</label>
+                        <input id="password" name="password" type="password" autocomplete="off"
+                               class="input-field" placeholder="password를 입력하세요" required />
+                    </div>
+
+                    <div class="rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+                        <p class="font-semibold text-slate-700">안내</p>
+                        <p class="mt-1">입력한 정보는 브라우저 메모리에만 저장되며, 새로고침하면 사라집니다.</p>
+                    </div>
+
+                    <button type="submit" class="primary-button w-full">
+                        로그인
+                    </button>
+                </form>
+            </section>
+
+            <!-- 채팅 화면 -->
+            <section id="chat-screen" class="screen hidden flex h-full flex-col">
+                <header class="app-header shrink-0 border-b border-slate-200 bg-white/95 px-4 py-4 backdrop-blur">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="min-w-0">
+                            <h2 class="truncate text-[1.05rem] font-bold leading-6 text-slate-900">해커스캠퍼스 고객센터</h2>
+                            <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                                <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 font-medium text-emerald-700">
+                                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                    AI 상담원 연결됨
+                                </span>
+                                <span id="login-username" class="rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-600"></span>
+                            </div>
+                        </div>
+                        <button id="logout-button" type="button" class="secondary-button shrink-0">
+                            로그아웃
+                        </button>
+                    </div>
+                </header>
+
+                <section id="chat-list" class="chat-list flex-1 space-y-4 overflow-y-auto px-4 py-4">
+                    <!-- 메시지는 JavaScript가 동적으로 렌더링 -->
+                </section>
+
+                <footer class="shrink-0 border-t border-slate-200 bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+                    <div class="rounded-3xl bg-slate-50 p-2 shadow-sm ring-1 ring-slate-200">
+                        <form id="chat-form" class="flex items-end gap-2">
+                            <textarea id="message-input" rows="1" class="message-input" placeholder="메시지를 입력하세요"></textarea>
+                            <button id="send-button" type="submit" class="primary-button send-button shrink-0">
+                                전송
+                            </button>
+                        </form>
+                    </div>
+                    <p class="mt-2 px-1 text-[11px] leading-5 text-slate-400">
+                        Enter 전송 / Shift + Enter 줄바꿈
+                    </p>
+                </footer>
+            </section>
+        </main>
+    </div>
+
+    <script src="/js/chatbot.js"></script>
+</body>
+</html>
+
