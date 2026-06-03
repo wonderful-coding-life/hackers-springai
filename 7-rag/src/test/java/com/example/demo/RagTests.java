@@ -142,6 +142,7 @@ public class RagTests {
         var request = SearchRequest.builder()
                 .query(question)
                 .topK(3)
+                .similarityThreshold(0.8)
                 .filterExpression("source == '운수좋은날.txt'")
                 .build();
 
