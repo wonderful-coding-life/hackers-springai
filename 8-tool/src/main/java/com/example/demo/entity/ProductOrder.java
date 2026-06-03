@@ -19,8 +19,8 @@ public class ProductOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String orderNumber;
-    private String memberId;
     private String productName;
     private String shippingAddress;
     private String shippingStatus;
+    private String memberName;
 }

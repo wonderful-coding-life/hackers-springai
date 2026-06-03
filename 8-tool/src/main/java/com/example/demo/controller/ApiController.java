@@ -14,10 +14,9 @@ import org.springframework.ai.support.ToolCallbacks;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 @RestController
@@ -34,16 +33,11 @@ public class ApiController {
             """;
 
     @PostMapping("/chats")
-    public String postChats(@RequestParam("message") String message) {
-        String memberId = "user123";
-
-        String userMessage = MessageFormat.format("""
-                회원 아이디: {0}
-                요청 내용: {1}
-                """, memberId, message);
+    public String postChats(@RequestBody String message) {
+        String username = "user";
 
         List<Message> messages = List.of(
-                new UserMessage(userMessage),
+                new UserMessage(message),
                 new SystemMessage(systemMessage)
         );
 
@@ -51,6 +45,7 @@ public class ApiController {
 
         ChatOptions chatOptions = OpenAiChatOptions.builder()
                 .toolCallbacks(toolCallbacks)
+                .toolContext("username", username)
                 .build();
         Prompt prompt = new Prompt(messages, chatOptions);
         ChatResponse response = chatModel.call(prompt);
