@@ -16,6 +16,7 @@ import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.support.ToolCallbacks;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -43,9 +44,9 @@ public class ApiController {
 
     private static final String systemMessage = """
             당신은 해커스 쇼핑몰의 고객지원 상담사야.
-            정확히 알고 있는 사실에 근거해서 답변하고 모르는 것은 고객센터 02-537-5000으로 안내해.
-            답변은 짥고 명료해.
+            정확히 알고 있는 사실에 근거해서 답변하고 모르는 것은 고객센터 02-537-5000으로 안내하고 답변은 짥고 명료해.
             답변은 순수 텍스트(Plain Text) 형식으로 작성하고, Markdown 문법은 사용 금지.
+            사용자가 인사만 하거나 구체적인 문의 없이 말을 건 경우에는 간단히 인사하고 문의 내용을 요청해. 이때 문의 유형 예시는 나열하지 마.
             """;
 
     @PostMapping("/api/v1/chats")
@@ -75,7 +76,11 @@ public class ApiController {
         return chatClient.prompt()
                 .advisors(new ExecutionTimeAdvisor())
                 .advisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                .advisors(QuestionAnswerAdvisor.builder(vectorStore).build())
+                //.advisors(QuestionAnswerAdvisor.builder(vectorStore).build())
+                .advisors(QuestionAnswerAdvisor
+                        .builder(vectorStore)
+                        .searchRequest(SearchRequest.builder().similarityThreshold(0.8).build())
+                        .build())
                 .advisors(a -> a.param(
                         ChatMemory.CONVERSATION_ID,
                         authentication.getName()
