@@ -69,8 +69,16 @@ body {
     min-height: 3.25rem;
     max-height: 9rem;
     resize: none;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     padding: 0.9rem 1rem;
     line-height: 1.45;
+}
+
+.message-input::-webkit-scrollbar {
+    width: 0;
+    height: 0;
 }
 
 .input-field:focus,
