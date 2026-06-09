@@ -56,20 +56,21 @@ public class DataInitializer implements ApplicationRunner {
             memberRepository.save(admin);
         }
 
+        productOrderRepository.deleteAll();
         if (productOrderRepository.count() == 0) {
             Member member = memberRepository.findByUsername("user").orElseThrow();
             var orders = List.of(
                     ProductOrder.builder()
-                            .orderNumber("H001")
+                            .orderNumber("ORD-20260001")
                             .member(member)
-                            .productName("맥북에어")
-                            .shippingAddress("서울시 강남구 역삼동")
+                            .productName("무선 기계식 키보드 K87")
+                            .shippingAddress("서울특별시 강남구 테헤란로 123, 캠퍼스타워 10층")
                             .shippingStatus("상품준비중").build(),
                     ProductOrder.builder()
-                            .orderNumber("H002")
+                            .orderNumber("ORD-20260002")
                             .member(member)
-                            .productName("아이폰")
-                            .shippingAddress("서울시 영등포구 여의도동")
+                            .productName("27인치 QHD 모니터 M27")
+                            .shippingAddress("경기도 성남시 분당구 판교역로 235, 판교테크센터 8층")
                             .shippingStatus("배송중").build()
             );
             productOrderRepository.saveAll(orders);
