@@ -34,7 +34,7 @@ public class FileSystemTool {
         }
     }
 
-    // D:/workspace/hello.txt 내용을 알려줘.
+    // D:/hackers/workspace/hello.txt 내용을 알려줘.
     @McpTool(
             name = "read-text-file",
             title = "텍스트 파일을 읽는다",
@@ -47,7 +47,7 @@ public class FileSystemTool {
         return Files.readString(Path.of(path));
     }
 
-    // D:/workspace/hello.txt 파일에 "안녕하세요"를 저장해줘.
+    // D:/hackers/workspace/hello.txt 파일에 "안녕하세요"를 저장해줘.
     @McpTool(
             name = "write-text-file",
             title = "텍스트 파일을 저장한다",

@@ -49,3 +49,9 @@ MCP Inspector는 node.js 기반으로 MCP 서버 테스트를 위한 UI를 제�
 ```cmd
 npx @modelcontextprotocol/inspector
 ```
+
+```text
+Transport Type: Streamable HTTP
+URL: http://localhost:8080/mcp
+Connection Type: Via Proxy
+```

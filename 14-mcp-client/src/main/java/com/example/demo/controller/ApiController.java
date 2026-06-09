@@ -34,7 +34,7 @@ public class ApiController {
 
     @PostMapping("/chats")
     public String postChats(@RequestBody String message) {
-        String username = "user2";
+        String username = "user";
 
         List<Message> messages = List.of(
                 new UserMessage(message),
@@ -45,9 +45,7 @@ public class ApiController {
 
         ChatOptions chatOptions = OpenAiChatOptions.builder()
                 .toolCallbacks(mcpTools)
-                .toolContext(Map.of(
-                        "username", username
-                ))
+                .toolContext(Map.of("username", username))
                 .build();
 
         Prompt prompt = new Prompt(messages, chatOptions);
