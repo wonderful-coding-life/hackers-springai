@@ -40,7 +40,7 @@ public class OpenAiApplication implements ApplicationRunner {
 
         var options = OpenAiChatOptions.builder()
                 .model("gpt-5.4")
-                .N(1)
+                .n(1)
                 .serviceTier("default") // default, flex, priority
                 .reasoningEffort("low") // low, medium, high
                 .build();

@@ -7,6 +7,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,7 @@ public class ChatBotController {
     private ChatMemory chatMemory;
 
     @PostMapping("/chats")
-    public String postChats(@RequestParam("id") String id, @RequestParam("message") String message) {
+    public String postChats(@RequestParam("id") String id, @RequestBody String message) {
         if (chatMemory.get(id).isEmpty()) {
             chatMemory.add(id, new SystemMessage("정확하고 명료하게 답변 해 주세요."));
         }
