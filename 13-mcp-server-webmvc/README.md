@@ -1,10 +1,3 @@
-# 핵심 키워드
-- Spring Web + Model Context Protocol Server
-- spring.ai.mcp.server.protocol=stateless
-- @McpTool(name="get-product-orders", title="상품 주문 목록을 조회합니다", description="상품 주문 목록을 조회합니다")
-- @McpTool(name="cancel-product-order", title="상품 주문을 취소합니다.", description = "특정 상품 주문을 취소할 때 사용합니다")
-- MCP Inspector: npx @modelcontextprotocol/inspector
-
 # 프로젝트 셋업
 - 스프링 이니셜라이저
     - Spring Web
@@ -13,23 +6,28 @@
     - H2 Database
     - Lombok
 
-
 - 애플리케이션 설정 (application.properties)
 ```properties
 spring.application.name=demo
-spring.ai.mcp.server.protocol=stateless
-```
-
-- 서버 프로토콜 종류에는 stateless(일반적으로 많이 사용)와 streamable 두가지 설정 가능하며, stateless는 tool 실행이 “단방향 요청 → 단일 응답”으로 제한되고, streamable은 tool 실행 중에도 MCP client(AI agent)와 “대화(양방향 상호작용)”가 가능
-```
-AI → findUser("김민수")
-→ 서버: "동명이인이 많습니다. 부서를 알려주세요"
-→ AI/사용자: "개발팀"
-→ 서버: 조회 계속
-→ 결과 반환
+spring.ai.mcp.server.protocol=streamable
 ```
 
 # MCP Tool 구현 (ProductOrderTool)
+기존 도구(Tool)에서 사용하던 애노테이션만 다음과 같이 바꾸면 된다.
+```text
+@Tool(description = "상품 주문 목록을 알려줍니다")
+--> @McpTool(name="get-product-orders", title = "상품 주문 조회", description="상품 주문 목록을 조회합니다")
+
+@ToolParam(description = "주문번호") String orderNumber
+--> @McpToolParam(description="주문번호") String orderNumber
+
+ToolContext toolContext
+String username = (String) toolContext.getContext().get("username");
+
+--> McpMeta mcpMeta
+--> String username = (String) mcpMeta.get("username");
+```
+
 ```java
 // name → 실제 MCP 프로토콜에서 사용하는 식별자 (kebab-case를 사용하면 LLM이 get product orders와 같이 토큰을 자연스럽게 분리할 수 있다)
 // title → UI(사람이 보는 화면)용 표시 이름
@@ -39,8 +37,9 @@ public String getProductOrders() {
 }
 ```
 ```java
-@McpTool(name="cancel-product-order", title="상품 주문을 취소합니다.", description = "특정 상품 주문을 취소할 때 사용합니다")
-String cancelProductOrder(@McpToolParam(description="주문번호") String orderNumber) {
+@McpTool(name="cancel-product-order", title = "상품 주문 취소", description = "특정 상품 주문을 취소할 때 사용합니다")
+String cancelProductOrder(@McpToolParam(description="주문번호") String orderNumber, McpMeta mcpMeta) {
+    String username = (String) mcpMeta.get("username");
 }
 ```
 
