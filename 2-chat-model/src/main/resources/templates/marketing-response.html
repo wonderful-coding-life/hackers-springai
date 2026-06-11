@@ -10,6 +10,7 @@
 <main class="container">
     <h1 class="title">마케팅 문구 결과</h1>
     <div class="result" th:text="${result}">결과가 여기에 표시됩니다.</div>
+    <div class="result" th:utext="${html}">결과가 여기에 표시됩니다.</div>
     <p class="actions"><a class="button" th:href="@{/marketing}">마케팅 문구 작성</a></p>
 </main>
 </body>

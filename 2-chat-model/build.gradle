@@ -27,6 +27,8 @@ dependencies {
 	implementation 'org.springframework.ai:spring-ai-starter-model-openai'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	// Markdown 응답을 HTML로 변환하기 위한 라이브러리
+	implementation 'org.commonmark:commonmark:0.28.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-thymeleaf-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 	testCompileOnly 'org.projectlombok:lombok'
