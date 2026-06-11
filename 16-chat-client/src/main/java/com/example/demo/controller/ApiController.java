@@ -6,16 +6,8 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.ChatOptions;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.support.ToolCallbacks;
-import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import tools.jackson.databind.ObjectMapper;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ApiController {
-    @Autowired
-    private OpenAiChatModel chatModel;
     @Autowired
     private ChatClient chatClient;
     @Autowired
@@ -49,29 +39,10 @@ public class ApiController {
             사용자가 인사만 하거나 구체적인 문의 없이 말을 건 경우에는 간단히 인사하고 문의 내용을 요청해. 이때 문의 유형 예시는 나열하지 마.
             """;
 
-    @PostMapping("/api/v1/chats")
-    public String postChats(@RequestBody String message, Authentication authentication) {
-
-        List<Message> messages = List.of(
-                new UserMessage(message),
-                new SystemMessage(systemMessage)
-        );
-        ToolCallback[] toolCallbacks = ToolCallbacks.from(productOrderTool);
-
-        ChatOptions chatOptions = OpenAiChatOptions.builder()
-                .toolCallbacks(toolCallbacks)
-                .toolContext("username", authentication.getName())
-                .build();
-
-        Prompt prompt = new Prompt(messages, chatOptions);
-        ChatResponse response = chatModel.call(prompt);
-        return response.getResult().getOutput().getText();
-    }
-
     @Autowired
     private ObjectMapper objectMapper;
 
-    @PostMapping(value = "/api/v2/chats", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @PostMapping(value = "/chats", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> postChats2(@RequestBody String message, Authentication authentication) {
         return chatClient.prompt()
                 .advisors(new ExecutionTimeAdvisor())
@@ -85,10 +56,8 @@ public class ApiController {
                         ChatMemory.CONVERSATION_ID,
                         authentication.getName()
                 ))
-                .tools(t -> t
-                        .callbacks(ToolCallbacks.from(productOrderTool))
-                        .context("username", authentication.getName())
-                )
+                .tools(productOrderTool)
+                .toolContext(Map.of("username", authentication.getName()))
                 .options(ChatOptions.builder().model("gpt-5.4-nano"))
                 .system(systemMessage)
                 .user(message)

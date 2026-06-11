@@ -183,7 +183,7 @@
         const authHeader = buildBasicAuthHeader(state.username, state.password);
 
         try {
-            const response = await fetch('/api/v2/chats', {
+            const response = await fetch('/chats', {
                 method: 'POST',
                 headers: {
                     Authorization: authHeader,
