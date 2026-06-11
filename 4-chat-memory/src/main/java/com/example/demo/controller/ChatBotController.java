@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 @RestController
 public class ChatBotController {
@@ -21,8 +23,8 @@ public class ChatBotController {
     @Autowired
     private ChatMemory chatMemory;
 
-    @PostMapping("/chats")
-    public String postChats(@RequestParam("id") String id, @RequestBody String message) {
+    //@PostMapping("/chats")
+    public String postChatsWithModel(@RequestParam("id") String id, @RequestBody String message) {
         if (chatMemory.get(id).isEmpty()) {
             chatMemory.add(id, new SystemMessage("정확하고 명료하게 답변 해 주세요."));
         }
@@ -37,5 +39,16 @@ public class ChatBotController {
         chatMemory.add(id, assistantMessage);
 
         return assistantMessage.getText();
+    }
+
+    @Autowired
+    private ChatClient chatClient;
+
+    @PostMapping("/chats")
+    public String postChats(@RequestParam("id") String id, @RequestBody String message) {
+        return chatClient.prompt()
+                .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, id))
+                .user(message)
+                .call().content();
     }
 }
