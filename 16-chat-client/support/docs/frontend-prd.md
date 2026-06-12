@@ -36,6 +36,10 @@ docs/design.md
 2. 채팅 화면
 ```
 
+- SPA로 구현하되 로그인 화면과 채팅 화면은 동시에 표시하지 않는다.
+- 초기 진입 시 로그인 화면만 표시하고, 로그인 성공 후 채팅 화면으로 전환한다.
+- 로그아웃 시 다시 로그인 화면으로 전환한다.
+
 ---
 
 ## 생성 파일
@@ -43,12 +47,15 @@ docs/design.md
 다음 파일을 생성한다.
 
 ```text
-static/
-├─ index.html
-├─ css/
-│  └─ chatbot.css
-└─ js/
-   └─ chatbot.js
+src/
+ └─ main/
+     └─ resources/
+         └─ static/
+             ├─ index.html
+             ├─ css
+             │  └─ chatbot.css
+             └─ js
+                └─ chatbot.js
 ```
 
 ---
