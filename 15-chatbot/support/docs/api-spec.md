@@ -1,32 +1,58 @@
-# API Specification
+# api-spec.md
 
-## Overview
+# 캠퍼스 고객센터 API 명세서
 
-이 애플리케이션은 쇼핑몰 고객센터 AI 챗봇이다.
+## 개요
 
-사용자는 Basic Authentication으로 인증한 후 채팅 API를 호출할 수 있다.
+이 애플리케이션은 캠퍼스 고객센터 AI 챗봇이다.
 
-AI 응답은 SSE(Server-Sent Events) 방식으로 스트리밍된다.
+프론트엔드는 사용자가 입력한 메시지를 서버에 전송하고, 서버는 AI 응답을 스트리밍 방식으로 반환한다.
 
 ---
 
-## Authentication
+## 인증 방식
 
-모든 API 요청은 Basic Authentication이 필요하다.
+이 애플리케이션은 Basic Authentication을 사용한다.
+
+인증이 필요한 API 요청에는 다음 헤더를 포함한다.
 
 ```http
 Authorization: Basic {Base64(username:password)}
 ```
 
+정적 리소스는 인증 없이 접근할 수 있다.
+
+```text
+/
+ /index.html
+ /css/**
+ /js/**
+ /images/**
+ /icons/**
+ /fonts/**
+```
+
+그 외의 API 요청은 인증이 필요하다.
+
 ---
 
-## Chat API
+## 채팅 API
 
-### Request
+### Endpoint
 
 ```http
 POST /chats
 ```
+
+### 설명
+
+사용자가 입력한 채팅 메시지를 서버에 전송한다.
+
+서버는 AI 응답을 SSE 형식으로 스트리밍한다.
+
+---
+
+## Request
 
 ### Headers
 
@@ -36,14 +62,16 @@ Content-Type: text/plain
 Accept: text/event-stream
 ```
 
-### Request Body
+### Body
 
-사용자가 입력한 메시지를 순수 텍스트로 전송한다.
+요청 본문에는 사용자가 입력한 메시지를 순수 텍스트로 전송한다.
+
+JSON 형식으로 보내지 않는다.
 
 예시:
 
 ```text
-배송 상태를 확인해줘
+수강신청 기간이 언제인가요?
 ```
 
 ---
@@ -56,59 +84,70 @@ Accept: text/event-stream
 text/event-stream
 ```
 
-### SSE Data Format
+### 응답 형식
 
-서버는 AI 응답을 토큰 단위로 스트리밍한다.
+서버는 AI 응답을 스트리밍 방식으로 전송한다.
+
+각 응답 조각은 SSE의 `data` 값으로 전달된다.
 
 예시:
 
 ```text
-data: "안녕하세요"
+data: "안녕하세요."
 
-data: " 고객님의"
+data: " 수강신청"
 
-data: " 주문 정보를"
+data: " 기간을"
 
-data: " 확인해드리겠습니다."
+data: " 안내해드리겠습니다."
 ```
 
-각 `data` 값은 JSON 문자열이므로 클라이언트에서 `JSON.parse()` 후 화면에 이어 붙여야 한다.
+각 `data` 값은 JSON 문자열이다.
+
+프론트엔드는 수신한 `data` 값을 `JSON.parse()`로 파싱한 뒤, 기존 챗봇 응답 말풍선에 이어 붙인다.
 
 ---
 
-## Client Requirements
+## 클라이언트 구현 규칙
 
-클라이언트 구현 시 다음 규칙을 반드시 준수한다.
+프론트엔드는 다음 규칙을 따른다.
 
-* `/chats`는 POST 방식으로 호출한다.
-* 요청 본문은 JSON이 아닌 `text/plain` 문자열이다.
-* Basic Authentication 헤더를 포함한다.
-* 응답은 SSE 스트림으로 처리한다.
-* 브라우저에서는 `EventSource` 대신 `fetch()`와 `ReadableStream`을 사용한다.
-* 수신한 `data` 값은 `JSON.parse()`로 파싱한다.
-* 파싱된 문자열을 기존 응답에 이어 붙여 실시간 채팅 UI를 구현한다.
-* 요청 취소 기능은 `AbortController`를 사용한다.
+* `/chats`는 `POST` 방식으로 호출한다.
+* 요청 본문은 JSON이 아닌 `text/plain` 문자열로 전송한다.
+* 인증이 필요한 요청에는 Basic Authentication 헤더를 포함한다.
+* 응답은 `text/event-stream` 형식으로 처리한다.
+* 브라우저에서는 `EventSource`를 사용하지 않는다.
+* `fetch()`와 `ReadableStream`을 사용해 스트리밍 응답을 처리한다.
+* 수신한 `data` 값은 `JSON.parse()` 후 화면에 이어 붙인다.
+* 응답 처리 중 사용자가 중단할 수 있도록 요청 취소 기능을 제공한다.
 
 ---
 
-## Error Response
+## 오류 응답
 
 ### 401 Unauthorized
 
-인증 실패
+인증 정보가 없거나 올바르지 않은 경우 발생한다.
 
 ### 403 Forbidden
 
-권한 없음
+인증은 되었지만 요청 권한이 없는 경우 발생한다.
 
 ### 500 Internal Server Error
 
-서버 오류
+서버 처리 중 오류가 발생한 경우 발생한다.
 
 ---
 
-## Notes
+## 서버 처리 기준
 
-서버는 인증된 사용자를 기준으로 대화 이력을 관리한다.
+서버는 인증된 사용자 이름을 기준으로 대화 이력을 구분한다.
 
-사용자는 이전 대화 내용을 이어서 질문할 수 있으며, AI는 관련 문서를 검색(RAG)하고 필요한 경우 주문 조회 기능을 호출할 수 있다.
+사용자가 이전에 질문한 내용은 같은 사용자 대화 이력에 이어서 처리될 수 있다.
+
+서버는 필요한 경우 다음 기능을 사용할 수 있다.
+
+* 고객센터 문서 검색
+* 주문 정보 조회 도구 호출
+
+이 내용은 서버 내부 처리 방식이며, 프론트엔드는 API 명세에 정의된 요청과 응답 형식만 따른다.

@@ -58,7 +58,7 @@ public class ApiController {
                 ))
                 .tools(productOrderTool)
                 .toolContext(Map.of("username", authentication.getName()))
-                .options(ChatOptions.builder().model("gpt-5.4-nano"))
+                .options(ChatOptions.builder().model("gpt-5.4"))
                 .system(systemMessage)
                 .user(message)
                 .stream()

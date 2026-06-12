@@ -18,13 +18,12 @@ docker run -d \
 - VectorStoreTests.java
 - 또는 support/sql/에 있는 schema, data 스크립트 임포트
 
-## UI 변경
-- 현재 샘플로 resources/static/index.html, css/chatbot.css, js/chatbot.js가 있는데 새롭게 만들고 싶다면 삭제
-- support/docs/ui-spec.md로 ui 생성
-
 ## 실행
 - bootRun
 - 브라우저로 localhost:8080
+- 기본 로그인 계정
+  - user / 1234
+  - admin / 1234
 
 ## 질문 유형
 - 단순 변심도 반품이 되나요?
