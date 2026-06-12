@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat Memory Test</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #d7dce2;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --assistant: #eef2f7;
+      --user: #dbeafe;
+      --danger: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    main {
+      width: min(920px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: calc(100vh - 56px);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(31, 41, 55, 0.08);
+    }
+
+    header {
+      display: flex;
+      gap: 16px;
+      align-items: end;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      background: #fbfcfe;
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .conversation {
+      display: grid;
+      gap: 8px;
+      min-width: 220px;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    input,
+    textarea,
+    button {
+      font: inherit;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+    }
+
+    input {
+      height: 38px;
+      padding: 0 11px;
+    }
+
+    textarea {
+      min-height: 72px;
+      max-height: 180px;
+      resize: vertical;
+      padding: 11px;
+      line-height: 1.45;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
+
+    #messages {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 360px;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .empty {
+      margin: auto;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .message {
+      max-width: min(680px, 88%);
+      padding: 12px 14px;
+      border-radius: 8px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: var(--user);
+    }
+
+    .message.assistant {
+      align-self: flex-start;
+      background: var(--assistant);
+    }
+
+    .message.error {
+      align-self: stretch;
+      max-width: 100%;
+      background: #fee2e2;
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+
+    form {
+      display: grid;
+      gap: 12px;
+      padding: 16px 20px 20px;
+      border-top: 1px solid var(--border);
+      background: #fbfcfe;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    button {
+      height: 40px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 6px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.62;
+    }
+
+    .status {
+      min-height: 20px;
+      color: var(--muted);
+      font-size: 13px;
+      margin-right: auto;
+    }
+
+    @media (max-width: 640px) {
+      main {
+        width: 100%;
+        padding: 0;
+      }
+
+      .shell {
+        min-height: 100vh;
+        border: 0;
+        border-radius: 0;
+      }
+
+      header {
+        display: grid;
+        align-items: stretch;
+      }
+
+      .conversation {
+        min-width: 0;
+      }
+
+      .message {
+        max-width: 94%;
+      }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <section class="shell">
+    <header>
+      <div>
+        <h1>ChatBotController /chats 테스트</h1>
+        <p class="subtitle">POST /chats?id=&lt;대화 ID&gt; 로 메시지를 전송합니다.</p>
+      </div>
+      <div class="conversation">
+        <label for="conversationId">대화 ID</label>
+        <input id="conversationId" type="text" autocomplete="off" />
+      </div>
+    </header>
+
+    <section id="messages" aria-live="polite">
+      <p class="empty">메시지를 입력하면 응답이 여기에 표시됩니다.</p>
+    </section>
+
+    <form id="chatForm">
+      <label for="message">메시지</label>
+      <textarea id="message" placeholder="질문을 입력하세요." required></textarea>
+      <div class="actions">
+        <span id="status" class="status"></span>
+        <button id="sendButton" type="submit">전송</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<script>
+  const conversationIdInput = document.querySelector("#conversationId");
+  const form = document.querySelector("#chatForm");
+  const messageInput = document.querySelector("#message");
+  const messages = document.querySelector("#messages");
+  const status = document.querySelector("#status");
+  const sendButton = document.querySelector("#sendButton");
+
+  const savedConversationId = localStorage.getItem("chat-test-conversation-id");
+  conversationIdInput.value = savedConversationId || crypto.randomUUID();
+
+  conversationIdInput.addEventListener("change", () => {
+    localStorage.setItem("chat-test-conversation-id", conversationIdInput.value.trim());
+  });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const conversationId = conversationIdInput.value.trim();
+    const message = messageInput.value.trim();
+
+    if (!conversationId || !message) {
+      return;
+    }
+
+    localStorage.setItem("chat-test-conversation-id", conversationId);
+    addMessage("user", message);
+    messageInput.value = "";
+    setLoading(true);
+
+    try {
+      const response = await fetch(`/chats?id=${encodeURIComponent(conversationId)}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=UTF-8"
+        },
+        body: message
+      });
+
+      const text = await response.text();
+
+      if (!response.ok) {
+        throw new Error(text || `${response.status} ${response.statusText}`);
+      }
+
+      addMessage("assistant", text || "(빈 응답)");
+    } catch (error) {
+      addMessage("error", `요청 실패: ${error.message}`);
+    } finally {
+      setLoading(false);
+      messageInput.focus();
+    }
+  });
+
+  function addMessage(type, text) {
+    const empty = messages.querySelector(".empty");
+    if (empty) {
+      empty.remove();
+    }
+
+    const item = document.createElement("div");
+    item.className = `message ${type}`;
+    item.textContent = text;
+    messages.appendChild(item);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function setLoading(isLoading) {
+    sendButton.disabled = isLoading;
+    messageInput.disabled = isLoading;
+    conversationIdInput.disabled = isLoading;
+    status.textContent = isLoading ? "응답을 기다리는 중..." : "";
+  }
+</script>
+</body>
+</html>

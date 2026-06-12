@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Receipt API Test</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      color: #202124;
+      background: #f7f8fa;
+    }
+
+    main {
+      width: min(900px, calc(100% - 32px));
+      margin: 40px auto;
+      padding: 28px;
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      border-radius: 8px;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-size: 28px;
+    }
+
+    form {
+      display: grid;
+      gap: 16px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+    }
+
+    input,
+    button {
+      font: inherit;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #c9d1d9;
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    button {
+      width: fit-content;
+      padding: 10px 18px;
+      border: 0;
+      border-radius: 6px;
+      color: #fff;
+      background: #0969da;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #8c959f;
+      cursor: wait;
+    }
+
+    .preview-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .preview-item {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .preview-item img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: contain;
+      border-radius: 4px;
+      background: #f6f8fa;
+    }
+
+    .preview-item span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+      color: #57606a;
+    }
+
+    .result {
+      margin-top: 24px;
+    }
+
+    .result h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    pre {
+      min-height: 120px;
+      margin: 0;
+      padding: 16px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f6f8fa;
+    }
+
+    .error {
+      color: #b42318;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>/receipts API 테스트</h1>
+
+    <form id="receiptForm">
+      <label>
+        영수증 이미지 파일
+        <input id="files" name="file" type="file" accept="image/*" multiple required>
+      </label>
+
+      <div id="previewList" class="preview-list" aria-label="선택한 영수증 이미지 미리보기"></div>
+
+      <button id="submitButton" type="submit">전송</button>
+    </form>
+
+    <section class="result" aria-live="polite">
+      <h2>응답</h2>
+      <pre id="result">아직 요청하지 않았습니다.</pre>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("receiptForm");
+    const fileInput = document.getElementById("files");
+    const previewList = document.getElementById("previewList");
+    const result = document.getElementById("result");
+    const submitButton = document.getElementById("submitButton");
+
+    fileInput.addEventListener("change", () => {
+      previewList.innerHTML = "";
+
+      Array.from(fileInput.files).forEach((file) => {
+        const item = document.createElement("div");
+        const image = document.createElement("img");
+        const name = document.createElement("span");
+
+        item.className = "preview-item";
+        image.src = URL.createObjectURL(file);
+        image.alt = file.name;
+        name.textContent = file.name;
+
+        item.append(image, name);
+        previewList.append(item);
+      });
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      result.classList.remove("error");
+      result.textContent = "요청 중입니다...";
+      submitButton.disabled = true;
+
+      try {
+        const response = await fetch("/receipts", {
+          method: "POST",
+          body: new FormData(form)
+        });
+
+        const text = await response.text();
+
+        if (!response.ok) {
+          throw new Error(text || `HTTP ${response.status}`);
+        }
+
+        result.textContent = text;
+      } catch (error) {
+        result.classList.add("error");
+        result.textContent = error.message;
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
