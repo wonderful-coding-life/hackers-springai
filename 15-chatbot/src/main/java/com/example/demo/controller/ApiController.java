@@ -4,9 +4,13 @@ import com.example.demo.advisor.ExecutionTimeAdvisor;
 import com.example.demo.tool.FaqSearchTool;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -26,6 +30,8 @@ public class ApiController {
     private ChatMemory chatMemory;
     @Autowired
     private ToolCallbackProvider toolCallbackProvider;
+//    @Autowired
+//    private VectorStore vectorStore;
     @Autowired
     private FaqSearchTool faqSearchTool;
 
@@ -56,9 +62,10 @@ public class ApiController {
     private ObjectMapper objectMapper;
 
     @PostMapping(value = "/chats", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> postChats2(@RequestBody String message, Authentication authentication) {
+    public Flux<String> postChats(@RequestBody String message, Authentication authentication) {
         return chatClient.prompt()
-                .advisors(new ExecutionTimeAdvisor())
+                //.advisors(new ExecutionTimeAdvisor())
+                .advisors(new SimpleLoggerAdvisor())
                 .advisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .advisors(a -> a.param(
                         ChatMemory.CONVERSATION_ID,
@@ -72,7 +79,6 @@ public class ApiController {
                 .tools(faqSearchTool)
                 .tools(toolCallbackProvider)
                 .toolContext(Map.of("username", authentication.getName()))
-                .options(ChatOptions.builder().model("gpt-5.4"))
                 .system(systemMessage)
                 .user(message)
                 .stream()
