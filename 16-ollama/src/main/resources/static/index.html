@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>캠퍼스 고객센터</title>
+    <link rel="stylesheet" href="/css/chatbot.css" />
+</head>
+<body>
+<div class="app-root">
+    <div class="app-shell">
+        <section id="login-screen" class="screen" aria-labelledby="login-title">
+            <h1 id="login-title" class="app-title">캠퍼스 고객센터</h1>
+            <form id="login-form" class="login-form" autocomplete="off">
+                <div class="form-field">
+                    <label for="username">사용자 이름</label>
+                    <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        placeholder="사용자 이름을 입력하세요"
+                        required
+                    />
+                </div>
+                <div class="form-field">
+                    <label for="password">패스워드</label>
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="패스워드를 입력하세요"
+                        required
+                    />
+                </div>
+                <button id="login-button" class="primary-button" type="submit">로그인</button>
+                <p id="login-error" class="error-message" role="alert" aria-live="polite"></p>
+            </form>
+        </section>
+
+        <section id="chat-screen" class="screen hidden" aria-label="채팅 화면">
+            <header class="chat-header">
+                <h2>캠퍼스 고객센터</h2>
+                <button id="logout-button" class="link-button" type="button">로그아웃</button>
+            </header>
+
+            <main id="chat-messages" class="chat-messages" aria-live="polite" aria-label="대화 내용"></main>
+
+            <p id="chat-error" class="error-message" role="alert" aria-live="polite"></p>
+
+            <form id="message-form" class="message-form">
+                <label for="message-input" class="visually-hidden">메시지 입력</label>
+                <input
+                    id="message-input"
+                    name="message"
+                    type="text"
+                    placeholder="메시지를 입력하세요"
+                    required
+                    autocomplete="off"
+                />
+                <button id="send-button" class="primary-button" type="submit">전송</button>
+            </form>
+        </section>
+    </div>
+</div>
+
+<script src="/js/chatbot.js"></script>
+</body>
+</html>
+
