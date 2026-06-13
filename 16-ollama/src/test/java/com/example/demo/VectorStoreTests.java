@@ -16,8 +16,6 @@ import java.util.List;
 
 @SpringBootTest
 public class VectorStoreTests {
-    private static final Logger log = LoggerFactory.getLogger(VectorStoreTests.class);
-
     @Autowired
     private VectorStore vectorStore;
 

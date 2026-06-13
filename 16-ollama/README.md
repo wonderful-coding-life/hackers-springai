@@ -79,11 +79,8 @@ ollama run gpt-oss
 
 ## 주의 사항
 
-* MCP Server에서 제공하는 도구가 너무 많으면 응답 생성 속도가 느려질 수 있습니다.
-* 필요한 도구만 선택적으로 등록하는 것이 좋습니다.
+* 도구(Tool)이 너무 많이 사용되면 gpt-oss가 정상적으로 동작하지 않을 수 있습니다.
 * FAQ 검색은 항상 수행하지 않고 LLM이 필요하다고 판단한 경우에만 수행하도록 구현합니다.
-
-특히 이번 예제의 핵심 포인트는
 
 ```text
 기존 방식
@@ -94,48 +91,3 @@ QuestionAnswerAdvisor
 faqSearchTool
 → LLM이 필요할 때만 벡터 검색 수행
 ```
-
-
-## Ollama 다운로드 및 실행
-
-```bash
-ollama pull gpt-oss
-ollama run gpt-oss
-```
-
----
-
-## 프로젝트 생성
-
-다음의 의존성을 포함하여 프로젝트를 생성합니다.
-
-* Spring Web
-* Ollama
-* Model Context Protocol Client
-* MariaDB Vector Database
-* PDF Document Reader
-* Spring Data JPA
-* MariaDB Driver
-* Lombok
-* Spring Security
-
-## 벡터데이터베이스 준비
-
-* 캠퍼스 온라인 쇼핑몰 반품 FAQ, 정책 메뉴얼을 임베딩 (VectorStoreTests 참조)
-
-## 챗 클라이언트 구성
-
-* MessageChatMemoryAdvisor 추가
-* QuestionAnswerAdvisor 추가하면 매번 RAG 검색을 하므로 대신 faqSearchTool을 사용하여 LLM이 판단하도록 합니다.
-* 주문 목록 조회, 주문 취소 MCP Server를 도구로 추가하고 사용자 이름을 도구 컨텍스트로 전달
-* Flux<String>으로 실시간 토큰 전송
-
-## Ollama 다운로드 및 실행
-
-```shell
-ollama pull gpt-oss
-ollama run gpt-oss
-```
-
-## 주의 사항
-* 도구(Tool)이 너무 많이 사용되면 gpt-oss가 정상적으로 동작하지 않을 수 있다.
