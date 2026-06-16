@@ -33,12 +33,6 @@ public class ElevenLabsSpeechModelTests {
             """;
 
     @Test
-    public void testSpeechModelSimple() throws IOException {
-        byte[] bin = speechModel.call(text);
-        Files.write(Paths.get("D:/hackers/lecture/output/elevenlabs-simple.mp3"), bin);
-    }
-
-    @Test
     public void testSpeechModel() throws IOException {
         // Eunha(cBOtnpVZNlQ5VJygXGB8) - Elegant Korean Female
         // Stella(2vbhUP8zyKg4dEZaTWGn) - Warm and Natural
