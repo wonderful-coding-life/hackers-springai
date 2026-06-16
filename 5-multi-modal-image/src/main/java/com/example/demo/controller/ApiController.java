@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.content.Media;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -33,6 +34,9 @@ public class ApiController {
         return chatModel.call(userMessage);
     }
 
+    @Autowired
+    private ChatClient chatClient;
+
     @PostMapping("/receipts")
     public String postReceipts(@RequestParam("file") List<MultipartFile> files) {
         var media = files.stream()
@@ -40,22 +44,12 @@ public class ApiController {
                         .mimeType(MimeTypeUtils.parseMimeType(file.getContentType()))
                         .data(file.getResource())
                         .build())
-                .toList();
+                .toArray(Media[]::new);
 
-        /*
-        var media = new ArrayList<Media>();
-        for (MultipartFile file : files) {
-            var resource = file.getResource();
-            var mimeType = MimeTypeUtils.parseMimeType(file.getContentType());
-            media.add(new Media(mimeType, resource));
-        }
-        */
-
-        var userMessage = UserMessage.builder()
-                .text("영수증의 날짜, 상호, 금액을 표 형태로 정리해 주세요.")
-                .media(media)
-                .build();
-
-        return chatModel.call(userMessage);
+        return chatClient.prompt()
+                .user(spec -> spec
+                        .text("영수증의 날짜, 상호, 금액을 표 형태로 정리해 주세요.")
+                        .media(media))
+                .call().content();
     }
 }

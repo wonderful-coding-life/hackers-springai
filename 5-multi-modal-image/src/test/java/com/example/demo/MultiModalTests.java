@@ -4,6 +4,7 @@ import com.openai.models.completions.CompletionUsage;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
@@ -15,6 +16,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.MimeTypeUtils;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @SpringBootTest
 public class MultiModalTests {
@@ -22,6 +24,9 @@ public class MultiModalTests {
 
     @Autowired
     private OpenAiChatModel chatModel;
+
+    @Autowired
+    private ChatClient chatClient;
 
     @Autowired
     private ResourceLoader resourceLoader;
@@ -50,20 +55,22 @@ public class MultiModalTests {
 
     @Test
     public void testMultiModalImageReceipts() {
-        var media = List.of(
+        Media[] media = {
                 Media.builder()
                         .data(new ClassPathResource("/images/receipt-1.jpg"))
-                        .mimeType(MimeTypeUtils.IMAGE_JPEG).build(),
+                        .mimeType(MimeTypeUtils.IMAGE_JPEG)
+                        .build(),
                 Media.builder()
                         .data(new ClassPathResource("/images/receipt-2.jpg"))
-                        .mimeType(MimeTypeUtils.IMAGE_JPEG).build());
-        var userMessage = UserMessage.builder()
-                .text("영수증의 날짜, 상호, 금액을 표 형태로 정리해 주세요.")
-                .media(media)
-                .build();
-        var chatResponse = chatModel.call(new Prompt(userMessage));
-        var assistantMessage = chatResponse.getResult().getOutput();
-        log.info("\ncompletion = {}", assistantMessage.getText());
-        log.info("\nmetadata = {}", (CompletionUsage)chatResponse.getMetadata().getUsage().getNativeUsage());
+                        .mimeType(MimeTypeUtils.IMAGE_JPEG)
+                        .build()
+        };
+
+        var completion = chatClient.prompt()
+                .user(spec -> spec
+                        .text("영수증의 날짜, 상호, 금액을 표 형태로 정리해 주세요.")
+                        .media(media))
+                .call().content();
+        log.info("\ncompletion={}", completion);
     }
 }
