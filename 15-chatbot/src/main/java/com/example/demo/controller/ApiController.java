@@ -1,21 +1,17 @@
 package com.example.demo.controller;
 
-import com.example.demo.advisor.ExecutionTimeAdvisor;
 import com.example.demo.tool.FaqSearchTool;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
-import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.tool.ToolCallbackProvider;
-import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import tools.jackson.databind.ObjectMapper;
@@ -23,6 +19,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api")
 public class ApiController {
     @Autowired
     private ChatClient chatClient;

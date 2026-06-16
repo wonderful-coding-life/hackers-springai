@@ -41,7 +41,7 @@ Authorization: Basic {Base64(username:password)}
 ### Endpoint
 
 ```http
-POST /chats
+POST /api/chats
 ```
 
 ### 설명
@@ -112,7 +112,7 @@ data: " 안내해드리겠습니다."
 
 프론트엔드는 다음 규칙을 따른다.
 
-* `/chats`는 `POST` 방식으로 호출한다.
+* `/api/chats`는 `POST` 방식으로 호출한다.
 * 요청 본문은 JSON이 아닌 `text/plain` 문자열로 전송한다.
 * 인증이 필요한 요청에는 Basic Authentication 헤더를 포함한다.
 * 응답은 `text/event-stream` 형식으로 처리한다.

@@ -96,7 +96,7 @@
         const controller = new AbortController();
         state.streamController = controller;
 
-        const response = await fetch("/chats", {
+        const response = await fetch("/api/chats", {
             method: "POST",
             headers: {
                 "Authorization": buildBasicAuthHeader(state.credentials),
