@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.ocr.ReceiptOcr;
+import com.example.demo.ocr.ReceiptOcrBatch;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,8 @@ public class StructuredOutputChatClientTests {
                         .text("영수증 이미지에서 정보를 추출해 주세요.")
                         .media(media))
                 .call()
-                .entity(new ParameterizedTypeReference<List<ReceiptOcr>>() {});
+                //.entity(new ParameterizedTypeReference<List<ReceiptOcr>>() {});
+                .entity(ReceiptOcrBatch.class);
 
         log.info("\n{}", completion);
     }
