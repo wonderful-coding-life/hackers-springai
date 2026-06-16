@@ -70,3 +70,19 @@ Spring AI의 `ImageModel`은 OpenAI, Stability AI, Vertex AI 등
 - `AppConfig.java` 참조
 - `OpenAiClientTests.java` 참조
 
+## 참고 사항
+
+Spring AI 2.0.0에서 OpenAI 공식 Java SDK를 사용하여 Image Edit 기능을 구현하려면 OkHttp 클라이언트 모듈을 추가해야 합니다.
+
+```groovy
+implementation 'com.openai:openai-java-client-okhttp:4.39.1'
+```
+
+위 의존성이 없으면 `OpenAIClient` 인터페이스는 사용할 수 있지만, `OpenAIOkHttpClient` 클래스를 사용할 수 없습니다.
+
+```java
+import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
+```
+
+또한 현재 Spring AI의 `ImageModel`은 이미지 생성(Text-to-Image)은 지원하지만 Image Edit API는 지원하지 않으므로, 이미지 편집 기능은 OpenAI Java SDK의 OpenAIClient를 직접 사용해야 합니다.
