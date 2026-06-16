@@ -4,6 +4,7 @@ import com.example.demo.entity.Receipt;
 import com.example.demo.ocr.ReceiptOcr;
 import com.example.demo.repository.ReceiptRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
@@ -30,8 +31,8 @@ public class ApiController {
     @Autowired
     private ReceiptRepository receiptRepository;
 
-    @PostMapping("/receipts")
-    public List<ReceiptOcr> postReceipts(@RequestParam("file") List<MultipartFile> files) {
+    //@PostMapping("/receipts")
+    public List<ReceiptOcr> postReceiptsChatModel(@RequestParam("file") List<MultipartFile> files) {
         var media = files.stream()
                 .map(file -> Media.builder()
                         .mimeType(MimeTypeUtils.parseMimeType(file.getContentType()))
@@ -62,6 +63,27 @@ public class ApiController {
         receiptRepository.saveAll(receipts);
 
         return receiptOcrs;
+    }
+
+    @Autowired
+    private ChatClient chatClient;
+
+    @PostMapping("/receipts")
+    public List<ReceiptOcr> postReceipts(@RequestParam("file") List<MultipartFile> files) {
+        var media = files.stream()
+                .map(file -> Media.builder()
+                        .mimeType(MimeTypeUtils.parseMimeType(file.getContentType()))
+                        .data(file.getResource())
+                        .build())
+                .toArray(Media[]::new);
+
+        return chatClient.prompt()
+                .system("날짜는 LocalDate 시간은 LocalTime 날짜시간은 LocalDateTime 형식으로 바꿔 주세요")
+                .user(spec -> spec
+                        .text("영수증 이미지에서 정보를 추출해 주세요.")
+                        .media(media))
+                .call()
+                .entity(new ParameterizedTypeReference<List<ReceiptOcr>>() {});
     }
 
     @GetMapping("/receipts")
