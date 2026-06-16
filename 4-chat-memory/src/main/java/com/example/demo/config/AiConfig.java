@@ -11,6 +11,7 @@ public class AiConfig {
     @Bean
     public ChatClient chatClient(ChatClient.Builder builder, ChatMemory chatMemory) {
         return builder
+                .defaultSystem("정확하고 명료하게 답변 해 주세요.")
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .build();
     }
