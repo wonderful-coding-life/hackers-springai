@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.advisor.ExecutionTimeAdvisor;
 import com.example.demo.tool.FaqSearchTool;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -61,10 +62,10 @@ public class ApiController {
     @PostMapping(value = "/chats", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> postChats(@RequestBody String message, Authentication authentication) {
         return chatClient.prompt()
-                //.advisors(new ExecutionTimeAdvisor())
+                .advisors(new ExecutionTimeAdvisor())
                 .advisors(new SimpleLoggerAdvisor())
                 .advisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                .advisors(a -> a.param(
+                .advisors(advisorSpec -> advisorSpec.param(
                         ChatMemory.CONVERSATION_ID,
                         authentication.getName()
                 ))
