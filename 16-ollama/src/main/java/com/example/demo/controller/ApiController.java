@@ -61,7 +61,7 @@ public class ApiController {
     public Flux<String> postChats(@RequestBody String message, Authentication authentication) {
         return chatClient.prompt()
                 .advisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                .advisors(a -> a.param(
+                .advisors(advisorSpec -> advisorSpec.param(
                         ChatMemory.CONVERSATION_ID,
                         authentication.getName()
                 ))

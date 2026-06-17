@@ -17,7 +17,7 @@ public class FaqSearchTool {
     @Autowired
     private VectorStore vectorStore;
 
-    @Tool(description = "해커스캠퍼스 온라인 쇼핑몰 반품 FAQ와 반품 정책 매뉴얼에서 관련 내용을 검색합니다.")
+    @Tool(description = "캠퍼스 온라인 쇼핑몰 반품 FAQ와 반품 정책 매뉴얼에서 관련 내용을 검색합니다.")
     public String searchFaq(
             @ToolParam(description = "사용자 질문 또는 검색어")
             String query
